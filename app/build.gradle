@@ -1,11 +1,13 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id "org.jetbrains.kotlin.kapt"
+    id 'com.yanzhenjie.andserver'
 }
+
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
 
     defaultConfig {
         applicationId "top.niunaijun.blackboxa"
@@ -105,6 +107,7 @@ android {
         textReport false
         check 'NewApi', 'InlinedApi'
     }
+    namespace 'top.niunaijun.blackboxa'
 }
 
 
@@ -168,4 +171,7 @@ dependencies {
 
     //悬浮窗
     implementation 'com.imuxuan:floatingview:1.6'
+    //web
+    implementation 'com.yanzhenjie.andserver:api:2.1.12'
+    kapt 'com.yanzhenjie.andserver:processor:2.1.12'
 }

@@ -4,7 +4,6 @@ plugins {
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     aidlPackageWhiteList "android/app/IServiceConnection.aidl"
     aidlPackageWhiteList "android/accounts/IAccountManagerResponse.aidl"
@@ -24,6 +23,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        aidl true
+    }
+    namespace 'top.niunaijun.android_mirror'
 }
 
 dependencies {

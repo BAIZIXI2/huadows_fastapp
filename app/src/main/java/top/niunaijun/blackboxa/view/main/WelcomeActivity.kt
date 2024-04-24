@@ -24,7 +24,7 @@ class WelcomeActivity : AppCompatActivity() {
         MainActivity.start(this)
         finish()
     }
-
+    //预览已安装应用列表
     private fun previewInstalledAppList(){
         val viewModel = ViewModelProvider(this,InjectionUtil.getListFactory()).get(ListViewModel::class.java)
         viewModel.previewInstalledList()

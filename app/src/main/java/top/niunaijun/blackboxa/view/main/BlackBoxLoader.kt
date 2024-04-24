@@ -20,9 +20,9 @@ import java.io.File
 class BlackBoxLoader {
 
 
-    private var mHideRoot by AppSharedPreferenceDelegate(App.getContext(), false)
-    private var mHideXposed by AppSharedPreferenceDelegate(App.getContext(), false)
-    private var mDaemonEnable by AppSharedPreferenceDelegate(App.getContext(), false)
+    private var mHideRoot by AppSharedPreferenceDelegate(App.getContext(), true)
+    private var mHideXposed by AppSharedPreferenceDelegate(App.getContext(), true)
+    private var mDaemonEnable by AppSharedPreferenceDelegate(App.getContext(), true)
     private var mShowShortcutPermissionDialog by AppSharedPreferenceDelegate(App.getContext(), true)
 
 

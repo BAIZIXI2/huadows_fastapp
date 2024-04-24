@@ -16,6 +16,7 @@ import top.niunaijun.blackboxa.R
 import top.niunaijun.blackboxa.app.App
 import top.niunaijun.blackboxa.app.AppManager
 import top.niunaijun.blackboxa.databinding.ActivityMainBinding
+import top.niunaijun.blackboxa.http.ServerManager
 import top.niunaijun.blackboxa.util.Resolution
 import top.niunaijun.blackboxa.util.inflate
 import top.niunaijun.blackboxa.view.apps.AppsFragment
@@ -42,6 +43,8 @@ class MainActivity : LoadingActivity() {
         initViewPager()
         initFab()
         initToolbarSubTitle()
+        val serverManager = ServerManager(this)
+        serverManager.startServer()
     }
 
     private fun initToolbarSubTitle() {
@@ -64,7 +67,7 @@ class MainActivity : LoadingActivity() {
             }
         }
     }
-
+    //初始化 用户页
     private fun initViewPager() {
 
         val userList = BlackBoxCore.get().users
@@ -99,7 +102,7 @@ class MainActivity : LoadingActivity() {
             apkPathResult.launch(intent)
         }
     }
-
+    //添加应用按钮 显示动画
     fun showFloatButton(show: Boolean) {
         val tranY: Float = Resolution.convertDpToPixel(120F, App.getContext())
         val time = 200L
@@ -147,41 +150,41 @@ class MainActivity : LoadingActivity() {
 
             }
         }
-
+    //创建菜单
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
-
+    //菜单点击事件
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.main_git -> {
-                val intent =
-                    Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/FBlackBox/BlackBox"))
-                startActivity(intent)
-            }
+//            R.id.main_git -> {
+//                val intent =
+//                    Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/FBlackBox/BlackBox"))
+//                startActivity(intent)
+//            }
 
             R.id.main_setting -> {
                 SettingActivity.start(this)
             }
 
-            R.id.main_tg -> {
-                val intent =
-                    Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/fvblackbox"))
-                startActivity(intent)
-            }
+//            R.id.main_tg -> {
+//                val intent =
+//                    Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/fvblackbox"))
+//                startActivity(intent)
+//            }
 
-            R.id.fake_location -> {
-//                toast("Still Developing")
-                val intent = Intent(this, FakeManagerActivity::class.java)
-                intent.putExtra("userID", 0)
-                startActivity(intent)
-            }
+//            R.id.fake_location -> {
+////                toast("Still Developing")
+//                val intent = Intent(this, FakeManagerActivity::class.java)
+//                intent.putExtra("userID", 0)
+//                startActivity(intent)
+//            }
         }
 
         return true
     }
-
+    //静态方法
     companion object {
         fun start(context: Context) {
             val intent = Intent(context, MainActivity::class.java)

@@ -2,13 +2,10 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion "28.0.2"
 
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
 
         consumerProguardFiles "consumer-rules.pro"
         ndk {
@@ -53,6 +50,10 @@ android {
         textReport false
         check 'NewApi', 'InlinedApi'
     }
+    buildFeatures {
+        aidl true
+    }
+    namespace 'top.niunaijun.blackbox'
 }
 
 

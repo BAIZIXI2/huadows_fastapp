@@ -24,14 +24,17 @@
                 android:summary="@string/jump_gms"/>
 
         <SwitchPreferenceCompat
-                app:key="xp_hide"
-                app:title="@string/hide_xposed" />
+            app:defaultValue="true"
+            app:key="xp_hide"
+            app:title="@string/hide_xposed" />
 
         <SwitchPreferenceCompat
+            app:defaultValue="true"
                 app:key="root_hide"
                 app:title="@string/hide_root" />
 
         <SwitchPreferenceCompat
+            app:defaultValue="true"
                 app:key="daemon_enable"
                 app:title="@string/daemon_enable" />
 

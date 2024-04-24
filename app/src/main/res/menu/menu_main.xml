@@ -8,18 +8,18 @@
             android:title="@string/setting"
             app:showAsAction="never" />
 
-    <item
-        android:id="@+id/fake_location"
-        android:title="@string/fake_location"
-        app:showAsAction="never" />
+<!--    <item-->
+<!--        android:id="@+id/fake_location"-->
+<!--        android:title="@string/fake_location"-->
+<!--        app:showAsAction="never" />-->
 
-    <item
-            android:id="@+id/main_git"
-            android:title="@string/open_source_path"
-            app:showAsAction="never" />
+<!--    <item-->
+<!--            android:id="@+id/main_git"-->
+<!--            android:title="@string/open_source_path"-->
+<!--            app:showAsAction="never" />-->
 
-    <item
-            android:id="@+id/main_tg"
-            android:title="@string/tg_group"
-            app:showAsAction="never" />
+<!--    <item-->
+<!--            android:id="@+id/main_tg"-->
+<!--            android:title="@string/tg_group"-->
+<!--            app:showAsAction="never" />-->
 </menu>
