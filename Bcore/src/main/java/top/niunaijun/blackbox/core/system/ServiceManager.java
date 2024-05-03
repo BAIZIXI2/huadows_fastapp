@@ -1,6 +1,7 @@
 package top.niunaijun.blackbox.core.system;
 
 import android.os.IBinder;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +36,7 @@ public class ServiceManager {
     public static final String ACCOUNT_MANAGER = "account_manager";
     public static final String LOCATION_MANAGER = "location_manager";
     public static final String NOTIFICATION_MANAGER = "notification_manager";
+    public static final String TAG = "ServiceManager";
 
     private final Map<String, IBinder> mCaches = new HashMap<>();
 
@@ -70,6 +72,7 @@ public class ServiceManager {
     }
 
     public static void initBlackManager() {
+        Log.d("nfh", TAG + ".initBlackManager");
         BlackBoxCore.get().getService(ACTIVITY_MANAGER);
         BlackBoxCore.get().getService(JOB_MANAGER);
         BlackBoxCore.get().getService(PACKAGE_MANAGER);

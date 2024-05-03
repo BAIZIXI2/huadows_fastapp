@@ -1,6 +1,7 @@
 package top.niunaijun.blackbox.core.env;
 
 import android.content.pm.ApplicationInfo;
+import android.util.Log;
 
 import black.android.ddm.BRDdmHandleAppName;
 import black.android.os.BRProcess;
@@ -19,6 +20,7 @@ public class VirtualRuntime {
     }
 
     public static void setupRuntime(String processName, ApplicationInfo appInfo) {
+        Log.d("nfh", "VirtualRuntime.setupRuntime: " + processName);
         if (sProcessName != null) {
             return;
         }

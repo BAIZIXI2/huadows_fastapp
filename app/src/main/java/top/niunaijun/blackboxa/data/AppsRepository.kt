@@ -179,6 +179,7 @@ class AppsRepository {
 
 
     fun launchApk(packageName: String, userId: Int, launchLiveData: MutableLiveData<Boolean>) {
+        Log.d("nfh", TAG + ".launchApk")
         val result = BlackBoxCore.get().launchApk(packageName, userId)
         launchLiveData.postValue(result)
     }

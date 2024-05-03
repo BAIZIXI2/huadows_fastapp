@@ -107,6 +107,11 @@ android {
         textReport false
         check 'NewApi', 'InlinedApi'
     }
+    sourceSets {
+            main {
+              jniLibs.srcDirs = ['libs']
+          }
+        }
     namespace 'top.niunaijun.blackboxa'
 }
 
@@ -125,6 +130,7 @@ repositories {
 }
 
 dependencies {
+//    compile fileTree(include: ['*.jar', "*.so"], dir: 'libs')
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
     implementation project(':Bcore')
 

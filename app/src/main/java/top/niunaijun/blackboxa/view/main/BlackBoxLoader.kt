@@ -63,6 +63,7 @@ class BlackBoxLoader {
     }
 
     fun addLifecycleCallback() {
+        Log.d("nfh", TAG + ".addLifecycleCallback")
         BlackBoxCore.get().addAppLifecycleCallback(object : AppLifecycleCallback() {
             override fun beforeCreateApplication(
                 packageName: String?,
@@ -70,6 +71,11 @@ class BlackBoxLoader {
                 context: Context?,
                 userId: Int
             ) {
+                Log.d("nfh", TAG + ".override.beforeCreateApplication")
+                Log.d(
+                    "nfh",
+                    "beforeCreateApplication: pkg $packageName, processName $processName,userID:${BActivityThread.getUserId()}"
+                )
                 Log.d(
                     TAG,
                     "beforeCreateApplication: pkg $packageName, processName $processName,userID:${BActivityThread.getUserId()}"
@@ -83,6 +89,8 @@ class BlackBoxLoader {
                 application: Application?,
                 userId: Int
             ) {
+                Log.d("nfh", TAG + ".override.beforeApplicationOnCreate")
+                Log.d("nfh", "beforeApplicationOnCreate: pkg $packageName, processName $processName")
                 Log.d(TAG, "beforeApplicationOnCreate: pkg $packageName, processName $processName")
             }
 
@@ -92,6 +100,9 @@ class BlackBoxLoader {
                 application: Application?,
                 userId: Int
             ) {
+                Log.d("nfh", TAG + ".override.afterApplicationOnCreate")
+                Log.d("nfh", "afterApplicationOnCreate: pkg $packageName, processName $processName")
+//                RockerManager.init(application,userId)
                 Log.d(TAG, "afterApplicationOnCreate: pkg $packageName, processName $processName")
 //                RockerManager.init(application,userId)
             }
@@ -99,6 +110,7 @@ class BlackBoxLoader {
     }
 
     fun attachBaseContext(context: Context) {
+        Log.d("nfh", "BlackBoxLoader.attachBaseContext")
         BlackBoxCore.get().doAttachBaseContext(context, object : ClientConfiguration() {
             override fun getHostPackageName(): String {
                 return context.packageName
@@ -125,6 +137,7 @@ class BlackBoxLoader {
     }
 
     fun doOnCreate(context: Context) {
+        Log.d("nfh", TAG + ".doOnCreate")
         BlackBoxCore.get().doCreate()
 
     }

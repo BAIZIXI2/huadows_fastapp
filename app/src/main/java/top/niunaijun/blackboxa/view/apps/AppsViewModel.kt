@@ -1,5 +1,6 @@
 package top.niunaijun.blackboxa.view.apps
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import top.niunaijun.blackboxa.bean.AppInfo
 import top.niunaijun.blackboxa.data.AppsRepository
@@ -47,6 +48,7 @@ class AppsViewModel(private val repo: AppsRepository) : BaseViewModel() {
     }
 
     fun launchApk(packageName: String, userID: Int) {
+        Log.d("nfh", "AppsViewModel.launchApk")
         launchOnUI {
             repo.launchApk(packageName, userID, launchLiveData)
         }

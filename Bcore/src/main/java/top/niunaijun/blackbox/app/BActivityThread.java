@@ -26,6 +26,7 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.os.StrictMode;
 import android.text.TextUtils;
+import android.util.Log;
 import android.webkit.WebView;
 
 import java.io.File;
@@ -172,6 +173,7 @@ public class BActivityThread extends IBActivityThread.Stub {
     }
 
     public void initProcess(AppConfig appConfig) {
+        Log.d("nfh", TAG + ".initProcess");
         synchronized (mConfigLock) {
             if (this.mAppConfig != null && !this.mAppConfig.packageName.equals(appConfig.packageName)) {
                 // 该进程已被attach
@@ -203,6 +205,7 @@ public class BActivityThread extends IBActivityThread.Stub {
     }
 
     public Service createService(ServiceInfo serviceInfo, IBinder token) {
+        Log.d("nfh", TAG + ".createService");
         if (!BActivityThread.currentActivityThread().isInit()) {
             BActivityThread.currentActivityThread().bindApplication(serviceInfo.packageName, serviceInfo.processName);
         }
@@ -242,6 +245,7 @@ public class BActivityThread extends IBActivityThread.Stub {
     }
 
     public JobService createJobService(ServiceInfo serviceInfo) {
+        Log.d("nfh", TAG + ".createJobService");
         if (!BActivityThread.currentActivityThread().isInit()) {
             BActivityThread.currentActivityThread().bindApplication(serviceInfo.packageName, serviceInfo.processName);
         }
@@ -282,7 +286,9 @@ public class BActivityThread extends IBActivityThread.Stub {
     }
 
     public void bindApplication(final String packageName, final String processName) {
+        Log.d("nfh", "BActivityThread.bindApplication");
         if (Looper.myLooper() != Looper.getMainLooper()) {
+            Log.d("nfh", "BActivityThread.bindApplication.Looper");
             final ConditionVariable conditionVariable = new ConditionVariable();
             BlackBoxCore.get().getHandler().post(() -> {
                 handleBindApplication(packageName, processName);
@@ -295,6 +301,7 @@ public class BActivityThread extends IBActivityThread.Stub {
     }
 
     public synchronized void handleBindApplication(String packageName, String processName) {
+        Log.d("nfh", "BActivityThread.handleBindApplication");
         if (isInit())
             return;
         try {
@@ -381,9 +388,14 @@ public class BActivityThread extends IBActivityThread.Stub {
             e.printStackTrace();
             throw new RuntimeException("Unable to makeApplication", e);
         }
+        Log.d("nfh", TAG + ".loadLibrary gadget");
+//        System.loadLibrary("gadget");
+        System.loadLibrary("frida-gadget");
+
     }
 
     public static Context createPackageContext(ApplicationInfo info) {
+        Log.d("nfh", TAG + ".createPackageContext");
         try {
             return BlackBoxCore.getContext().createPackageContext(info.packageName,
                     Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
@@ -394,6 +406,7 @@ public class BActivityThread extends IBActivityThread.Stub {
     }
 
     private void installProviders(Context context, String processName, List<ProviderInfo> provider) {
+        Log.d("nfh", TAG + ".installProviders");
         long origId = Binder.clearCallingIdentity();
         try {
             for (ProviderInfo providerInfo : provider) {
@@ -416,6 +429,7 @@ public class BActivityThread extends IBActivityThread.Stub {
     }
 
     public static void installProvider(Object mainThread, Context context, ProviderInfo providerInfo, Object holder) throws Throwable {
+        Log.d("nfh", TAG + ".installProvider");
         Method installProvider = Reflector.findMethodByFirstName(mainThread.getClass(), "installProvider");
         if (installProvider != null) {
             installProvider.setAccessible(true);
@@ -424,6 +438,7 @@ public class BActivityThread extends IBActivityThread.Stub {
     }
 
     public void loadXposed(Context context) {
+        Log.d("nfh", TAG + ".loadXposed");
         String vPackageName = getAppPackageName();
         String vProcessName = getAppProcessName();
         if (!TextUtils.isEmpty(vPackageName) && !TextUtils.isEmpty(vProcessName) && BXposedManager.get().isXPEnable()) {
@@ -477,6 +492,7 @@ public class BActivityThread extends IBActivityThread.Stub {
 
     @Override
     public IBinder acquireContentProviderClient(ProviderInfo providerInfo) throws RemoteException {
+        Log.d("nfh", TAG + ".acquireContentProviderClient");
         if (!isInit()) {
             bindApplication(BActivityThread.getAppConfig().packageName, BActivityThread.getAppConfig().processName);
         }
@@ -499,6 +515,7 @@ public class BActivityThread extends IBActivityThread.Stub {
 
     @Override
     public void finishActivity(final IBinder token) {
+        Log.d("nfh", TAG + ".finishActivity");
         mH.post(() -> {
             Map<IBinder, Object> activities = BRActivityThread.get(BlackBoxCore.mainThread()).mActivities();
             if (activities.isEmpty())
@@ -521,6 +538,7 @@ public class BActivityThread extends IBActivityThread.Stub {
 
     @Override
     public void handleNewIntent(final IBinder token, final Intent intent) {
+        Log.d("nfh", TAG + ".handleNewIntent");
         mH.post(() -> {
             Intent newIntent;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
@@ -547,6 +565,7 @@ public class BActivityThread extends IBActivityThread.Stub {
 
     @Override
     public void scheduleReceiver(ReceiverData data) throws RemoteException {
+        Log.d("nfh", TAG + ".scheduleReceiver");
         if (!isInit()) {
             bindApplication();
         }

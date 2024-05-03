@@ -74,6 +74,7 @@ public class HookManager {
     }
 
     public void init() {
+        Log.d("nfh", "HookManager.init");
         if (BlackBoxCore.get().isBlackProcess() || BlackBoxCore.get().isServerProcess()) {
             addInjector(new IDisplayManagerProxy());
             addInjector(new OsStub());

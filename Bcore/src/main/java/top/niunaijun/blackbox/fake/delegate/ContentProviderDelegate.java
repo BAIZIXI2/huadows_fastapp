@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.IInterface;
 import android.util.ArrayMap;
+import android.util.Log;
 
 import java.lang.reflect.Proxy;
 import java.util.HashSet;
@@ -37,6 +38,7 @@ public class ContentProviderDelegate {
     private static Set<String> sInjected = new HashSet<>();
 
     public static void update(Object holder, String auth) {
+        Log.d("nfh", TAG + ".update");
         IInterface iInterface;
         if (BuildCompat.isOreo()) {
             iInterface = BRContentProviderHolderOreo.get(holder).provider();
@@ -65,6 +67,7 @@ public class ContentProviderDelegate {
     }
 
     public static void init() {
+        Log.d("nfh", TAG + ".init");
         clearSettingProvider();
 
         BlackBoxCore.getContext().getContentResolver().call(Uri.parse("content://settings"), "", null, null);
@@ -87,6 +90,7 @@ public class ContentProviderDelegate {
     }
 
     public static void clearSettingProvider() {
+        Log.d("nfh", TAG + ".clearSettingProvider");
         Object cache;
         cache = BRSettingsSystem.get().sNameValueCache();
         if (cache != null) {
@@ -105,6 +109,7 @@ public class ContentProviderDelegate {
     }
 
     private static void clearContentProvider(Object cache) {
+        Log.d("nfh", TAG + ".clearContentProvider");
         if (BuildCompat.isOreo()) {
             Object holder = BRSettingsNameValueCacheOreo.get(cache).mProviderHolder();
             if (holder != null) {

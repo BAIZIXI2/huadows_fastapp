@@ -19,6 +19,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Process;
+import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -119,6 +120,7 @@ public class BlackBoxCore extends ClientConfiguration {
     }
 
     public void doAttachBaseContext(Context context, ClientConfiguration clientConfiguration) {
+        Log.d("nfh", TAG + ".doAttachBaseContext");
         if (clientConfiguration == null) {
             throw new IllegalArgumentException("ClientConfiguration is null!");
         }
@@ -139,6 +141,7 @@ public class BlackBoxCore extends ClientConfiguration {
         if (BlackBoxCore.get().isBlackProcess()) {
             BEnvironment.load();
             if (processName.endsWith("p0")) {
+                Log.d("nfh", processName);
 //                android.os.Debug.waitForDebugger();
             }
 //            android.os.Debug.waitForDebugger();
@@ -160,6 +163,7 @@ public class BlackBoxCore extends ClientConfiguration {
     }
 
     public void doCreate() {
+        Log.d("nfh", TAG + ".doCreate");
         // fix contentProvider
         if (isBlackProcess()) {
             ContentProviderDelegate.init();
@@ -174,6 +178,7 @@ public class BlackBoxCore extends ClientConfiguration {
     }
 
     public void startActivity(Intent intent, int userId) {
+        Log.d("nfh", TAG + ".startActivity");
         if (mClientConfiguration.isEnableLauncherActivity()) {
             LauncherActivity.launch(intent, userId);
         } else {
@@ -198,6 +203,7 @@ public class BlackBoxCore extends ClientConfiguration {
     }
 
     public boolean launchApk(String packageName, int userId) {
+        Log.d("nfh", TAG + ".launchApk");
         Intent launchIntentForPackage = getBPackageManager().getLaunchIntentForPackage(packageName, userId);
         if (launchIntentForPackage == null) {
             return false;
@@ -326,6 +332,7 @@ public class BlackBoxCore extends ClientConfiguration {
     }
 
     public void addAppLifecycleCallback(AppLifecycleCallback appLifecycleCallback) {
+        Log.d("nfh", TAG + ".addAppLifecycleCallback");
         mAppLifecycleCallbacks.add(appLifecycleCallback);
     }
 
@@ -444,6 +451,7 @@ public class BlackBoxCore extends ClientConfiguration {
     }
 
     private void initNotificationManager() {
+        Log.d("nfh", TAG + ".initNotificationManager");
         NotificationManager nm = (NotificationManager) BlackBoxCore.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         String CHANNEL_ONE_ID = BlackBoxCore.getContext().getPackageName() + ".blackbox_core";
         String CHANNEL_ONE_NAME = "blackbox_core";

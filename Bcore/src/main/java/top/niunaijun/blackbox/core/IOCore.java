@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.os.Process;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.File;
 import java.util.HashMap;
@@ -111,6 +112,7 @@ public class IOCore {
 
     // 由于正常情况Application已完成重定向，以下重定向是怕代码写死。
     public void enableRedirect(Context context) {
+        Log.d("nfh", TAG + ".enableRedirect");
         Map<String, String> rule = new LinkedHashMap<>();
         Set<String> blackRule = new HashSet<>();
         String packageName = context.getPackageName();
@@ -118,15 +120,18 @@ public class IOCore {
         try {
             ApplicationInfo packageInfo = BlackBoxCore.getBPackageManager().getApplicationInfo(packageName, PackageManager.GET_META_DATA, BActivityThread.getUserId());
             int systemUserId = BlackBoxCore.getHostUserId();
+            Log.d("nfh", TAG + ".packageInfo.nativeLibraryDir: " + packageInfo.nativeLibraryDir);
             rule.put(String.format("/data/data/%s/lib", packageName), packageInfo.nativeLibraryDir);
             rule.put(String.format("/data/user/%d/%s/lib", systemUserId, packageName), packageInfo.nativeLibraryDir);
 
+            Log.d("nfh", TAG + ".packageInfo.dataDir: " + packageInfo.dataDir);
             rule.put(String.format("/data/data/%s", packageName), packageInfo.dataDir);
             rule.put(String.format("/data/user/%d/%s", systemUserId, packageName), packageInfo.dataDir);
 
             if (BlackBoxCore.getContext().getExternalCacheDir() != null && context.getExternalCacheDir() != null) {
                 File external = BEnvironment.getExternalUserDir(BActivityThread.getUserId());
 
+                Log.d("nfh", TAG + ".external: " + external.getAbsolutePath());
                 // sdcard
                 rule.put("/sdcard", external.getAbsolutePath());
                 rule.put(String.format("/storage/emulated/%d", systemUserId), external.getAbsolutePath());
@@ -164,12 +169,14 @@ public class IOCore {
     }
 
     private void proc(Map<String, String> rule) {
+        Log.d("nfh", TAG + ".proc");
         int appPid = BActivityThread.getAppPid();
         int pid = Process.myPid();
         String selfProc = "/proc/self/";
         String proc = "/proc/" + pid + "/";
 
         String cmdline = new File(BEnvironment.getProcDir(appPid), "cmdline").getAbsolutePath();
+        Log.d("nfh", TAG + ".proc.cmdline:" + cmdline);
         rule.put(proc + "cmdline", cmdline);
         rule.put(selfProc + "cmdline", cmdline);
     }

@@ -43,8 +43,8 @@ class MainActivity : LoadingActivity() {
         initViewPager()
         initFab()
         initToolbarSubTitle()
-        val serverManager = ServerManager(this)
-        serverManager.startServer()
+//        val serverManager = ServerManager(this)
+//        serverManager.startServer()
     }
 
     private fun initToolbarSubTitle() {

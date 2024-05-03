@@ -3,6 +3,8 @@ package top.niunaijun.blackboxa.app
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import android.os.Process
+import android.util.Log
 
 /**
  *
@@ -25,6 +27,7 @@ class App : Application() {
     }
 
     override fun attachBaseContext(base: Context?) {
+        Log.d("nfh", "App.attachBaseContext: " + Process.myPid())
         super.attachBaseContext(base)
         mContext = base!!
         AppManager.doAttachBaseContext(base)
@@ -32,6 +35,7 @@ class App : Application() {
     }
 
     override fun onCreate() {
+        Log.d("nfh", "App.onCreate")
         super.onCreate()
         AppManager.doOnCreate(mContext)
     }

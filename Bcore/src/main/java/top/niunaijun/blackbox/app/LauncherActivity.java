@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -24,6 +25,7 @@ public class LauncherActivity extends Activity {
     private boolean isRunning = false;
 
     public static void launch(Intent intent, int userId) {
+        Log.d("nfh", TAG + ".launch");
         Intent splash = new Intent();
         splash.setClass(BlackBoxCore.getContext(), LauncherActivity.class);
         splash.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

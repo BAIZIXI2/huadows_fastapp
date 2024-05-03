@@ -3,6 +3,7 @@ package top.niunaijun.blackboxa.view.apps
 import android.graphics.Point
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -298,6 +299,7 @@ class AppsFragment : Fragment() {
     }
 
     private fun showLoading() {
+        Log.d("nfh", "AppsFragment.showLoading")
         if(requireActivity() is LoadingActivity){
             (requireActivity() as LoadingActivity).showLoading()
         }
@@ -305,6 +307,7 @@ class AppsFragment : Fragment() {
 
 
     private fun hideLoading() {
+        Log.d("nfh", "AppsFragment.hideLoading")
         if(requireActivity() is LoadingActivity){
             (requireActivity() as LoadingActivity).hideLoading()
         }

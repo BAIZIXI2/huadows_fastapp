@@ -7,6 +7,7 @@ import android.content.pm.ProviderInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
 
 import top.niunaijun.blackbox.app.BActivityThread;
 import top.niunaijun.blackbox.core.system.ServiceManager;
@@ -38,6 +39,7 @@ public class BActivityManager extends BlackManager<IBActivityManagerService> {
     }
 
     public AppConfig initProcess(String packageName, String processName, int userId) {
+        Log.d("nfh", TAG + ".initProcess");
         try {
             return getService().initProcess(packageName, processName, userId);
         } catch (RemoteException e) {
@@ -47,6 +49,7 @@ public class BActivityManager extends BlackManager<IBActivityManagerService> {
     }
 
     public void restartProcess(String packageName, String processName, int userId) {
+        Log.d("nfh", TAG + ".restartProcess");
         try {
             getService().restartProcess(packageName, processName, userId);
         } catch (RemoteException e) {
@@ -55,6 +58,7 @@ public class BActivityManager extends BlackManager<IBActivityManagerService> {
     }
 
     public void startActivity(Intent intent, int userId) {
+        Log.d("nfh", TAG + ".startActivity");
         try {
             getService().startActivity(intent, userId);
         } catch (RemoteException e) {
@@ -63,6 +67,7 @@ public class BActivityManager extends BlackManager<IBActivityManagerService> {
     }
 
     public int startActivityAms(int userId, Intent intent, String resolvedType, IBinder resultTo, String resultWho, int requestCode, int flags, Bundle options) {
+        Log.d("nfh", TAG + ".startActivityAms");
         try {
             return getService().startActivityAms(userId, intent, resolvedType, resultTo, resultWho, requestCode, flags, options);
         } catch (RemoteException e) {
@@ -72,6 +77,7 @@ public class BActivityManager extends BlackManager<IBActivityManagerService> {
     }
 
     public int startActivities(int userId, Intent[] intent, String[] resolvedType, IBinder resultTo, Bundle options) {
+        Log.d("nfh", TAG + ".startActivities");
         try {
             return getService().startActivities(userId, intent, resolvedType, resultTo, options);
         } catch (RemoteException e) {
@@ -81,6 +87,7 @@ public class BActivityManager extends BlackManager<IBActivityManagerService> {
     }
 
     public ComponentName startService(Intent intent, String resolvedType, boolean requireForeground, int userId) {
+        Log.d("nfh", TAG + ".startService");
         try {
             return getService().startService(intent, resolvedType, requireForeground, userId);
         } catch (RemoteException e) {
