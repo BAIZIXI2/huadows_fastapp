@@ -10,6 +10,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import top.niunaijun.blackbox.BlackBoxCore;
+import top.niunaijun.blackbox.http.ServerManager;
 import top.niunaijun.blackbox.utils.compat.BuildCompat;
 
 
@@ -42,6 +43,7 @@ public class DaemonService extends Service {
         if (BuildCompat.isOreo()) {
             showNotification();
         }
+        ServerManager.startServer();
         return START_STICKY;
     }
 

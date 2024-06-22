@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.yanzhenjie.andserver'
 
 android {
     compileSdkVersion 28
@@ -77,4 +78,8 @@ dependencies {
     implementation project(':Bcore:pine-core')
     implementation project(':Bcore:pine-xposed')
     implementation project(':Bcore:pine-xposed-res')
+
+
+    implementation 'com.yanzhenjie.andserver:api:2.1.12'
+    annotationProcessor 'com.yanzhenjie.andserver:processor:2.1.12'
 }

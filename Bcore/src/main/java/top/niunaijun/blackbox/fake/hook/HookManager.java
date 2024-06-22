@@ -74,7 +74,13 @@ public class HookManager {
     }
 
     public void init() {
-        Log.d("nfh", "HookManager.init");
+        Log.e("nfh", "HookManager.init");
+//        if(BlackBoxCore.get().isBlackProcess())
+//        {
+////            Log.d("nfh", "getHostPkg: " + BlackBoxCore.getHostPkg());
+////            android.os.Debug.waitForDebugger();
+//            return;
+//        }
         if (BlackBoxCore.get().isBlackProcess() || BlackBoxCore.get().isServerProcess()) {
             addInjector(new IDisplayManagerProxy());
             addInjector(new OsStub());
@@ -181,12 +187,13 @@ public class HookManager {
     }
 
     void injectAll() {
+        Slog.w(TAG, "start hook");
         for (IInjectHook value : mInjectors.values()) {
             try {
                 Slog.d(TAG, "hook: " + value);
                 value.injectHook();
             } catch (Exception e) {
-                Slog.d(TAG, "hook error: " + value);
+                Slog.w(TAG, "hook error: " + value + " : " + e.getMessage());
             }
         }
     }

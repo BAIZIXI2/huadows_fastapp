@@ -141,7 +141,7 @@ public class BlackBoxCore extends ClientConfiguration {
         if (BlackBoxCore.get().isBlackProcess()) {
             BEnvironment.load();
             if (processName.endsWith("p0")) {
-                Log.d("nfh", processName);
+//                Log.d("nfh", processName);
 //                android.os.Debug.waitForDebugger();
             }
 //            android.os.Debug.waitForDebugger();
@@ -406,6 +406,10 @@ public class BlackBoxCore extends ClientConfiguration {
     public boolean isHideXposed() {
         return mClientConfiguration.isHideXposed();
     }
+    @Override
+    public boolean isEnableFrida() {
+        return mClientConfiguration.isEnableFrida();
+    }
 
     @Override
     public String getHostPackageName() {
@@ -451,7 +455,7 @@ public class BlackBoxCore extends ClientConfiguration {
     }
 
     private void initNotificationManager() {
-        Log.d("nfh", TAG + ".initNotificationManager");
+//        Log.d("nfh", TAG + ".initNotificationManager");
         NotificationManager nm = (NotificationManager) BlackBoxCore.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         String CHANNEL_ONE_ID = BlackBoxCore.getContext().getPackageName() + ".blackbox_core";
         String CHANNEL_ONE_NAME = "blackbox_core";

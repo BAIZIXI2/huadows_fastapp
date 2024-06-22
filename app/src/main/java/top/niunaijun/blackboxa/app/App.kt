@@ -28,6 +28,10 @@ class App : Application() {
 
     override fun attachBaseContext(base: Context?) {
         Log.d("nfh", "App.attachBaseContext: " + Process.myPid())
+//        if (processName.endsWith("p0")) {
+//                Log.d("nfh", processName);
+//                android.os.Debug.waitForDebugger();
+//        }
         super.attachBaseContext(base)
         mContext = base!!
         AppManager.doAttachBaseContext(base)

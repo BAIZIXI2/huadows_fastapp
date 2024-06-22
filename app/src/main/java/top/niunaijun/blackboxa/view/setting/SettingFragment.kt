@@ -63,6 +63,13 @@ class SettingFragment : PreferenceFragmentCompat() {
             daemonPreference.setDefaultValue(mDaemonEnable)
             daemonPreference
         }
+
+        invalidHideState {
+            val fridaPreference: Preference = (findPreference("frida_enable")!!)
+            val mEnable = AppManager.mBlackBoxLoader.fridaEnable()
+            fridaPreference.setDefaultValue(mEnable)
+            fridaPreference
+        }
     }
 
     private fun initGms() {
@@ -96,6 +103,10 @@ class SettingFragment : PreferenceFragmentCompat() {
 
                 "daemon_enable" -> {
                     AppManager.mBlackBoxLoader.invalidDaemonEnable(tmpHide)
+                }
+
+                "frida_enable" -> {
+                    AppManager.mBlackBoxLoader.invalidFridaEnable(tmpHide)
                 }
             }
 

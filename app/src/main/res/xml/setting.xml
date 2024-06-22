@@ -38,6 +38,11 @@
                 app:key="daemon_enable"
                 app:title="@string/daemon_enable" />
 
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="frida_enable"
+            app:title="@string/frida_enable" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

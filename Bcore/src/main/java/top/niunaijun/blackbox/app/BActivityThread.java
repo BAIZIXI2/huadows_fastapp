@@ -73,6 +73,7 @@ import top.niunaijun.blackbox.fake.delegate.ContentProviderDelegate;
 import top.niunaijun.blackbox.fake.frameworks.BXposedManager;
 import top.niunaijun.blackbox.fake.hook.HookManager;
 import top.niunaijun.blackbox.fake.service.HCallbackProxy;
+import top.niunaijun.blackbox.utils.GadgetUtils;
 import top.niunaijun.blackbox.utils.Reflector;
 import top.niunaijun.blackbox.utils.Slog;
 import top.niunaijun.blackbox.utils.compat.ActivityManagerCompat;
@@ -349,6 +350,10 @@ public class BActivityThread extends IBActivityThread.Stub {
         assert packageContext != null;
         IOCore.get().enableRedirect(packageContext);
 
+//        if(BlackBoxCore.get().isEnableFrida())
+//        {
+//            GadgetUtils.load();
+//        }
         AppBindData bindData = new AppBindData();
         bindData.appInfo = applicationInfo;
         bindData.processName = processName;
@@ -388,10 +393,17 @@ public class BActivityThread extends IBActivityThread.Stub {
             e.printStackTrace();
             throw new RuntimeException("Unable to makeApplication", e);
         }
-        Log.d("nfh", TAG + ".loadLibrary gadget");
-//        System.loadLibrary("gadget");
-        System.loadLibrary("frida-gadget");
 
+        if(BlackBoxCore.get().isEnableFrida())
+        {
+            GadgetUtils.load();
+        }
+////        System.loadLibrary("gadget");
+//
+//        GadgetUtils.getCurrSOLoaded();
+////        GadgetUtils.load();
+////////        GadgetUtils.getAllSOLoaded();
+//        GadgetUtils.getCurrSOLoaded();
     }
 
     public static Context createPackageContext(ApplicationInfo info) {

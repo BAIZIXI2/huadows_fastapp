@@ -116,11 +116,26 @@ public class IOCore {
         Map<String, String> rule = new LinkedHashMap<>();
         Set<String> blackRule = new HashSet<>();
         String packageName = context.getPackageName();
-
+// 获取内部存储目录
+        File internalDir = context.getFilesDir();
+        Log.e("nfh", "context.internalDir: " + internalDir.getAbsolutePath());
+// 获取外部存储目录
+        File externalDir = context.getExternalFilesDir(null);
+        Log.e("nfh", "context.externalDir: " + externalDir.getAbsolutePath());
         try {
             ApplicationInfo packageInfo = BlackBoxCore.getBPackageManager().getApplicationInfo(packageName, PackageManager.GET_META_DATA, BActivityThread.getUserId());
             int systemUserId = BlackBoxCore.getHostUserId();
             Log.d("nfh", TAG + ".packageInfo.nativeLibraryDir: " + packageInfo.nativeLibraryDir);
+
+            File directory = new File(packageInfo.nativeLibraryDir);
+            File[] files = directory.listFiles();
+
+            if (files != null) {
+                for (File file : files) {
+                    // 对每个文件执行操作
+                    Log.d("nfh", "nativeLibraryDir.file: " + file.getAbsolutePath());
+                }
+            }
             rule.put(String.format("/data/data/%s/lib", packageName), packageInfo.nativeLibraryDir);
             rule.put(String.format("/data/user/%d/%s/lib", systemUserId, packageName), packageInfo.nativeLibraryDir);
 
@@ -169,9 +184,9 @@ public class IOCore {
     }
 
     private void proc(Map<String, String> rule) {
-        Log.d("nfh", TAG + ".proc");
         int appPid = BActivityThread.getAppPid();
         int pid = Process.myPid();
+        Log.d("nfh", TAG + ".proc:appid-" + appPid + " pid-" + pid);
         String selfProc = "/proc/self/";
         String proc = "/proc/" + pid + "/";
 

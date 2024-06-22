@@ -26,6 +26,10 @@ public abstract class ClientConfiguration {
         return true;
     }
 
+    public boolean isEnableFrida() {
+        return true;
+    }
+
     public boolean isEnableLauncherActivity() {
         return true;
     }

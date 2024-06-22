@@ -14,7 +14,7 @@ import kotlinx.coroutines.*
 open class BaseViewModel : ViewModel() {
 
     fun launchOnUI(block: suspend CoroutineScope.() -> Unit) {
-        Log.d("nfh", "BaseViewModel.launchOnUI")
+//        Log.d("nfh", "BaseViewModel.launchOnUI")
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
