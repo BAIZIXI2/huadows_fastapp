@@ -74,13 +74,7 @@ public class HookManager {
     }
 
     public void init() {
-        Log.e("nfh", "HookManager.init");
-//        if(BlackBoxCore.get().isBlackProcess())
-//        {
-////            Log.d("nfh", "getHostPkg: " + BlackBoxCore.getHostPkg());
-////            android.os.Debug.waitForDebugger();
-//            return;
-//        }
+        Log.d("nfh", "HookManager.init");
         if (BlackBoxCore.get().isBlackProcess() || BlackBoxCore.get().isServerProcess()) {
             addInjector(new IDisplayManagerProxy());
             addInjector(new OsStub());
@@ -114,10 +108,10 @@ public class HookManager {
             addInjector(new IPersistentDataBlockServiceProxy());
             addInjector(AppInstrumentation.get());
             /*
-            * It takes time to test and enhance the compatibility of WifiManager
-            * (only tested in Android 10).
-            * commented by BlackBoxing at 2022/03/08
-            * */
+             * It takes time to test and enhance the compatibility of WifiManager
+             * (only tested in Android 10).
+             * commented by BlackBoxing at 2022/03/08
+             * */
             addInjector(new IWifiManagerProxy());
             addInjector(new IWifiScannerProxy());
             // 12.0
@@ -156,10 +150,10 @@ public class HookManager {
                 addInjector(new IFingerprintManagerProxy());
                 addInjector(new IGraphicsStatsProxy());
             }
-            // 5.0
-            if (BuildCompat.isL()) {
-                addInjector(new IJobServiceProxy());
-            }
+//            // 5.0
+//            if (BuildCompat.isL()) {
+//                addInjector(new IJobServiceProxy());
+//            }
         }
         injectAll();
     }
@@ -187,13 +181,12 @@ public class HookManager {
     }
 
     void injectAll() {
-        Slog.w(TAG, "start hook");
         for (IInjectHook value : mInjectors.values()) {
             try {
                 Slog.d(TAG, "hook: " + value);
                 value.injectHook();
             } catch (Exception e) {
-                Slog.w(TAG, "hook error: " + value + " : " + e.getMessage());
+                Slog.d(TAG, "hook error: " + value);
             }
         }
     }

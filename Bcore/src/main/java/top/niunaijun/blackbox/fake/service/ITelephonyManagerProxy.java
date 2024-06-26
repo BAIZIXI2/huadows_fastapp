@@ -33,18 +33,19 @@ public class ITelephonyManagerProxy extends BinderInvocationStub {
 
     public ITelephonyManagerProxy() {
         super(BRServiceManager.get().getService(Context.TELEPHONY_SERVICE));
-
-        Log.e("nfh", "ITelephonyManagerProxy: " + BlackBoxCore.getHostPkg());
+        Log.d(TAG, "ITelephonyManagerProxy");
     }
 
     @Override
     protected Object getWho() {
+        Log.d(TAG, "getWho");
         IBinder telephony = BRServiceManager.get().getService(Context.TELEPHONY_SERVICE);
         return BRITelephonyStub.get().asInterface(telephony);
     }
 
     @Override
     protected void inject(Object baseInvocation, Object proxyInvocation) {
+        Log.d(TAG, "inject");
         replaceSystemService(Context.TELEPHONY_SERVICE);
     }
 
@@ -59,10 +60,8 @@ public class ITelephonyManagerProxy extends BinderInvocationStub {
         protected Object hook(Object who, Method method, Object[] args) throws Throwable {
 //                MethodParameterUtils.replaceFirstAppPkg(args);
 //                return method.invoke(who, args);
-            String m = Md5Utils.md5(BlackBoxCore.getHostPkg());
-            Log.e("nfh", "getDeviceId: " + BlackBoxCore.getHostPkg() + " : " + m);
-            String s = "3a79be3c45dada6f";
-            return s;
+//            return Md5Utils.md5(BlackBoxCore.getHostPkg());
+            return null;
         }
     }
 
@@ -73,10 +72,7 @@ public class ITelephonyManagerProxy extends BinderInvocationStub {
 //                MethodParameterUtils.replaceFirstAppPkg(args);
 //                return method.invoke(who, args);
 //            return Md5Utils.md5(BlackBoxCore.getHostPkg());
-            String m = Md5Utils.md5(BlackBoxCore.getHostPkg());
-            Log.e("nfh", "getImeiForSlot: " + BlackBoxCore.getHostPkg() + " : " + m);
-            String s = "3a79be3c45dada6f";
-            return s;
+            return null;
         }
     }
 
@@ -87,10 +83,7 @@ public class ITelephonyManagerProxy extends BinderInvocationStub {
 //                MethodParameterUtils.replaceFirstAppPkg(args);
 //                return method.invoke(who, args);
 //            return Md5Utils.md5(BlackBoxCore.getHostPkg());
-            String m = Md5Utils.md5(BlackBoxCore.getHostPkg());
-            Log.e("nfh", "GetMeidForSlot: " + BlackBoxCore.getHostPkg() + " : " + m);
-            String s = "3a79be3c45dada6f";
-            return s;
+            return null;
         }
     }
 
@@ -115,11 +108,7 @@ public class ITelephonyManagerProxy extends BinderInvocationStub {
     public static class GetSubscriberId extends MethodHook {
         @Override
         protected Object hook(Object who, Method method, Object[] args) throws Throwable {
-//            return Md5Utils.md5(BlackBoxCore.getHostPkg());
-            String m = Md5Utils.md5(BlackBoxCore.getHostPkg());
-            Log.e("nfh", "GetSubscriberId: " + BlackBoxCore.getHostPkg() + " : " + m);
-            String s = "3a79be3c45dada6f";
-            return s;
+            return Md5Utils.md5(BlackBoxCore.getHostPkg());
         }
     }
 
@@ -128,10 +117,7 @@ public class ITelephonyManagerProxy extends BinderInvocationStub {
         @Override
         protected Object hook(Object who, Method method, Object[] args) throws Throwable {
 //            return Md5Utils.md5(BlackBoxCore.getHostPkg());
-            String m = Md5Utils.md5(BlackBoxCore.getHostPkg());
-            Log.e("nfh", "GetDeviceIdWithFeature: " + BlackBoxCore.getHostPkg() + " : " + m);
-            String s = "3a79be3c45dada6f";
-            return s;
+            return null;
         }
     }
 

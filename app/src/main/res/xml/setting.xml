@@ -39,7 +39,7 @@
                 app:title="@string/daemon_enable" />
 
         <SwitchPreferenceCompat
-            app:defaultValue="true"
+            app:defaultValue="false"
             app:key="frida_enable"
             app:title="@string/frida_enable" />
 
