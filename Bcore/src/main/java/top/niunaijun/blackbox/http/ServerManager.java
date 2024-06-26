@@ -10,6 +10,7 @@ import com.yanzhenjie.andserver.Server;
 import java.util.concurrent.TimeUnit;
 
 import top.niunaijun.blackbox.BlackBoxCore;
+import top.niunaijun.blackbox.touch.ControlThread;
 
 public class ServerManager {
 
@@ -26,6 +27,7 @@ public class ServerManager {
                         @Override
                         public void onStarted() {
                             // TODO The server started successfully.
+                            ControlThread.get().start();
                             Toast.makeText(context, "web start", Toast.LENGTH_LONG).show();
                         }
 
