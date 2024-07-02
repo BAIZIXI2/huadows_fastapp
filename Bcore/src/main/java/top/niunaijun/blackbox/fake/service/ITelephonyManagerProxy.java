@@ -33,19 +33,16 @@ public class ITelephonyManagerProxy extends BinderInvocationStub {
 
     public ITelephonyManagerProxy() {
         super(BRServiceManager.get().getService(Context.TELEPHONY_SERVICE));
-        Log.d(TAG, "ITelephonyManagerProxy");
     }
 
     @Override
     protected Object getWho() {
-        Log.d(TAG, "getWho");
         IBinder telephony = BRServiceManager.get().getService(Context.TELEPHONY_SERVICE);
         return BRITelephonyStub.get().asInterface(telephony);
     }
 
     @Override
     protected void inject(Object baseInvocation, Object proxyInvocation) {
-        Log.d(TAG, "inject");
         replaceSystemService(Context.TELEPHONY_SERVICE);
     }
 
@@ -60,8 +57,7 @@ public class ITelephonyManagerProxy extends BinderInvocationStub {
         protected Object hook(Object who, Method method, Object[] args) throws Throwable {
 //                MethodParameterUtils.replaceFirstAppPkg(args);
 //                return method.invoke(who, args);
-//            return Md5Utils.md5(BlackBoxCore.getHostPkg());
-            return null;
+            return Md5Utils.md5(BlackBoxCore.getHostPkg());
         }
     }
 
@@ -71,8 +67,7 @@ public class ITelephonyManagerProxy extends BinderInvocationStub {
         protected Object hook(Object who, Method method, Object[] args) throws Throwable {
 //                MethodParameterUtils.replaceFirstAppPkg(args);
 //                return method.invoke(who, args);
-//            return Md5Utils.md5(BlackBoxCore.getHostPkg());
-            return null;
+            return Md5Utils.md5(BlackBoxCore.getHostPkg());
         }
     }
 
@@ -82,8 +77,7 @@ public class ITelephonyManagerProxy extends BinderInvocationStub {
         protected Object hook(Object who, Method method, Object[] args) throws Throwable {
 //                MethodParameterUtils.replaceFirstAppPkg(args);
 //                return method.invoke(who, args);
-//            return Md5Utils.md5(BlackBoxCore.getHostPkg());
-            return null;
+            return Md5Utils.md5(BlackBoxCore.getHostPkg());
         }
     }
 
@@ -116,8 +110,7 @@ public class ITelephonyManagerProxy extends BinderInvocationStub {
     public static class GetDeviceIdWithFeature extends MethodHook {
         @Override
         protected Object hook(Object who, Method method, Object[] args) throws Throwable {
-//            return Md5Utils.md5(BlackBoxCore.getHostPkg());
-            return null;
+            return Md5Utils.md5(BlackBoxCore.getHostPkg());
         }
     }
 

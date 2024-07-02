@@ -53,6 +53,7 @@ import top.niunaijun.blackbox.fake.frameworks.BXposedManager;
 import top.niunaijun.blackbox.fake.hook.HookManager;
 import top.niunaijun.blackbox.proxy.ProxyManifest;
 import top.niunaijun.blackbox.utils.FileUtils;
+import top.niunaijun.blackbox.utils.GadgetUtils;
 import top.niunaijun.blackbox.utils.ShellUtils;
 import top.niunaijun.blackbox.utils.Slog;
 import top.niunaijun.blackbox.utils.compat.BuildCompat;
@@ -138,9 +139,11 @@ public class BlackBoxCore extends ClientConfiguration {
         } else {
             mProcessType = ProcessType.BAppClient;
         }
+        boolean frida = false;
         if (BlackBoxCore.get().isBlackProcess()) {
             BEnvironment.load();
             if (processName.endsWith("p0")) {
+                frida = true;
 //                Log.d("nfh", processName);
 //                android.os.Debug.waitForDebugger();
             }
@@ -160,6 +163,10 @@ public class BlackBoxCore extends ClientConfiguration {
         PineConfig.debug = true;
         PineConfig.debuggable = true;
         HookManager.get().init();
+
+        if (frida && BlackBoxCore.get().isEnableFrida()) {
+            GadgetUtils.load();
+        }
     }
 
     public void doCreate() {

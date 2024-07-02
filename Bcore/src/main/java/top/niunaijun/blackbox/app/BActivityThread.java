@@ -349,11 +349,6 @@ public class BActivityThread extends IBActivityThread.Stub {
         NativeCore.init(Build.VERSION.SDK_INT);
         assert packageContext != null;
         IOCore.get().enableRedirect(packageContext);
-
-//        if(BlackBoxCore.get().isEnableFrida())
-//        {
-//            GadgetUtils.load();
-//        }
         AppBindData bindData = new AppBindData();
         bindData.appInfo = applicationInfo;
         bindData.processName = processName;
@@ -394,16 +389,10 @@ public class BActivityThread extends IBActivityThread.Stub {
             throw new RuntimeException("Unable to makeApplication", e);
         }
 
-        if(BlackBoxCore.get().isEnableFrida())
-        {
-            GadgetUtils.load();
-        }
-////        System.loadLibrary("gadget");
-//
-//        GadgetUtils.getCurrSOLoaded();
-////        GadgetUtils.load();
-////////        GadgetUtils.getAllSOLoaded();
-//        GadgetUtils.getCurrSOLoaded();
+//        if(BlackBoxCore.get().isEnableFrida())
+//        {
+//            GadgetUtils.load();
+//        }
     }
 
     public static Context createPackageContext(ApplicationInfo info) {

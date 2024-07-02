@@ -1,10 +1,15 @@
 package top.niunaijun.blackbox.fake.hook;
 
+import android.content.ContentResolver;
+import android.provider.Settings;
 import android.util.Log;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import top.canyie.pine.Pine;
+import top.canyie.pine.callback.MethodHook;
 import top.niunaijun.blackbox.BlackBoxCore;
 import top.niunaijun.blackbox.fake.delegate.AppInstrumentation;
 import top.niunaijun.blackbox.fake.service.HCallbackProxy;
@@ -51,6 +56,7 @@ import top.niunaijun.blackbox.fake.service.IWindowManagerProxy;
 import top.niunaijun.blackbox.fake.service.context.ContentServiceStub;
 import top.niunaijun.blackbox.fake.service.context.RestrictionsManagerStub;
 import top.niunaijun.blackbox.fake.service.libcore.OsStub;
+import top.niunaijun.blackbox.utils.Md5Utils;
 import top.niunaijun.blackbox.utils.Slog;
 import top.niunaijun.blackbox.utils.compat.BuildCompat;
 
@@ -76,6 +82,37 @@ public class HookManager {
     public void init() {
         Log.d("nfh", "HookManager.init");
         if (BlackBoxCore.get().isBlackProcess() || BlackBoxCore.get().isServerProcess()) {
+            try {
+                Method getInt = Settings.Global.class.getDeclaredMethod("getInt", ContentResolver.class,String.class,int.class);
+                Pine.hook(getInt, new MethodHook() {
+                    @Override
+                    public void afterCall(Pine.CallFrame callFrame) throws Throwable {
+//                        super.afterCall(callFrame);
+                        if(callFrame.args[1].equals("adb_enabled"))
+                        {
+                            callFrame.setResult(0);
+                        }
+                    }
+                });
+                Method getString = Settings.Secure.class.getDeclaredMethod("getString", ContentResolver.class,String.class);
+                Pine.hook(getString, new MethodHook() {
+                    @Override
+                    public void afterCall(Pine.CallFrame callFrame) throws Throwable {
+//                        super.afterCall(callFrame);
+                        if(callFrame.args[1].equals(Settings.Secure.ANDROID_ID))
+                        {
+                            Log.i("Pine","android id: " + callFrame.getResult());
+                            String currentTimeMillis = String.valueOf(System.currentTimeMillis());
+                            Log.i("Pine","currentTimeMillis: " + currentTimeMillis);
+                            String md5 = Md5Utils.md5_16(currentTimeMillis);
+                            Log.i("Pine", md5);
+//                            callFrame.setResult("7ecaea6c6e89aa1d");
+                        }
+                    }
+                });
+            } catch (NoSuchMethodException e) {
+                Log.e("Pine", e.getMessage());
+            }
             addInjector(new IDisplayManagerProxy());
             addInjector(new OsStub());
             addInjector(new IActivityManagerProxy());

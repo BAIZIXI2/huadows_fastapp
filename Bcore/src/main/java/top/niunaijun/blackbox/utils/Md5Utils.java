@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 
 public class Md5Utils {
@@ -18,7 +19,21 @@ public class Md5Utils {
     private static final char[] hexDigits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd',
             'e', 'f' };
 
-
+    public static String md5_16(String input){
+        String s = md5(input);
+        if(s == null)
+        {
+            return null;
+        }
+        if(s.length() < 16)
+        {
+            return null;
+        }
+        int max = s.length() - 16 + 1;
+        Random random = new Random();
+        int startIndex = random.nextInt(max); // 获取随机起始索引，最大为 16
+        return s.substring(startIndex, startIndex + 16);
+    }
     public static String md5(String input) {
         if (input == null)
             return null;
