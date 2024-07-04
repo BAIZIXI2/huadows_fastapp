@@ -94,22 +94,39 @@ public class HookManager {
                         }
                     }
                 });
-                Method getString = Settings.Secure.class.getDeclaredMethod("getString", ContentResolver.class,String.class);
-                Pine.hook(getString, new MethodHook() {
+//                Method getString = Settings.Secure.class.getDeclaredMethod("getString", ContentResolver.class,String.class);
+//                Pine.hook(getString, new MethodHook() {
+//                    @Override
+//                    public void afterCall(Pine.CallFrame callFrame) throws Throwable {
+////                        super.afterCall(callFrame);
+//                        if(callFrame.args[1].equals(Settings.Secure.ANDROID_ID))
+//                        {
+//                            Log.i("Pine","android id: " + callFrame.getResult());
+////                            String currentTimeMillis = String.valueOf(System.currentTimeMillis());
+////                            Log.i("Pine","currentTimeMillis: " + currentTimeMillis);
+////                            String md5 = Md5Utils.md5_16(currentTimeMillis);
+////                            Log.i("Pine", md5);
+////                            callFrame.setResult("7ecaea6c6e89aa1d");
+//                        }
+//                    }
+//                });
+                Method getStringForUser = Settings.Secure.class.getDeclaredMethod("getStringForUser", ContentResolver.class,String.class,int.class);
+                Pine.hook(getStringForUser, new MethodHook() {
                     @Override
                     public void afterCall(Pine.CallFrame callFrame) throws Throwable {
 //                        super.afterCall(callFrame);
                         if(callFrame.args[1].equals(Settings.Secure.ANDROID_ID))
                         {
                             Log.i("Pine","android id: " + callFrame.getResult());
-                            String currentTimeMillis = String.valueOf(System.currentTimeMillis());
-                            Log.i("Pine","currentTimeMillis: " + currentTimeMillis);
-                            String md5 = Md5Utils.md5_16(currentTimeMillis);
-                            Log.i("Pine", md5);
+//                            String currentTimeMillis = String.valueOf(System.currentTimeMillis());
+//                            Log.i("Pine","currentTimeMillis: " + currentTimeMillis);
+//                            String md5 = Md5Utils.md5_16(currentTimeMillis);
+//                            Log.i("Pine", md5);
 //                            callFrame.setResult("7ecaea6c6e89aa1d");
                         }
                     }
                 });
+
             } catch (NoSuchMethodException e) {
                 Log.e("Pine", e.getMessage());
             }

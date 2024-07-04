@@ -62,4 +62,5 @@
     <string name="disable_gms">关闭服务</string>
     <string name="disable_gms_hint">是否清除当前Google服务环境？Google服务数据将被清空。</string>
     <string name="no_gms">当前手机没有Google服务环境。</string>
+    <string name="device_setting">设备设置</string>
 </resources>
