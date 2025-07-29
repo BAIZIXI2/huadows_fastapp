@@ -1,5 +1,7 @@
+// /Bcore/build.gradle
+
 apply plugin: 'com.android.library'
-apply plugin: 'com.yanzhenjie.andserver'
+// apply plugin: 'com.yanzhenjie.andserver' // 删掉此行
 
 android {
 //    compileSdkVersion 28
@@ -67,10 +69,13 @@ tasks.withType(Javadoc) {
 
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
-    implementation 'androidx.appcompat:appcompat:1.2.0'
 
-    implementation 'me.weishu:free_reflection:3.0.1'
+   implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+implementation("com.google.android.material:material:1.9.0")
+ 
+   //jcenter已经停止服务，该库迁移到jitpack implementation 'me.weishu:free_reflection:3.0.1'
+   implementation 'com.github.tiann:FreeReflection:3.2.0'
     implementation "com.github.CodingGay.BlackReflection:core:$rootProject.ext.blackReflection"
     implementation project(':Bcore:black-fake')
     implementation project(':Bcore:black-hook')
@@ -83,7 +88,6 @@ dependencies {
     implementation 'top.canyie.pine:core:0.2.9'
     implementation 'top.canyie.pine:xposed:0.1.0'
 
-
-    implementation 'com.yanzhenjie.andserver:api:2.1.12'
-    annotationProcessor 'com.yanzhenjie.andserver:processor:2.1.12'
+    // implementation 'com.yanzhenjie.andserver:api:2.1.12' // 删掉此行
+    // annotationProcessor 'com.yanzhenjie.andserver:processor:2.1.12' // 删掉此行
 }

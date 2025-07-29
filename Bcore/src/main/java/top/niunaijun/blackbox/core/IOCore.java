@@ -1,10 +1,11 @@
+// Bcore/src/main/java/top/niunaijun/blackbox/core/IOCore.java
+
 package top.niunaijun.blackbox.core;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.os.Environment;
 import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
@@ -143,6 +144,8 @@ public class IOCore {
             rule.put(String.format("/data/data/%s", packageName), packageInfo.dataDir);
             rule.put(String.format("/data/user/%d/%s", systemUserId, packageName), packageInfo.dataDir);
 
+            // ====================== 代码修改开始 ======================
+            // 恢复原始的全局外部存储重定向逻辑
             if (BlackBoxCore.getContext().getExternalCacheDir() != null && context.getExternalCacheDir() != null) {
                 File external = BEnvironment.getExternalUserDir(BActivityThread.getUserId());
 
@@ -154,6 +157,8 @@ public class IOCore {
                 blackRule.add("/sdcard/Pictures");
                 blackRule.add(String.format("/storage/emulated/%d/Pictures", systemUserId));
             }
+            // ====================== 代码修改结束 ======================
+
             if (BlackBoxCore.get().isHideRoot()) {
                 hideRoot(rule);
             }

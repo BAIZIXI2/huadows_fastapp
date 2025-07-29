@@ -1,7 +1,7 @@
+// 文件路径: 快应用/Bcore/src/main/java/top/niunaijun/blackbox/utils/GadgetUtils.java
+
 package top.niunaijun.blackbox.utils;
 
-import android.nfc.Tag;
-import android.os.Process;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -13,22 +13,21 @@ import java.util.List;
 
 public class GadgetUtils {
     private static final String TAG = "nfh";
-    static {
-//        System.loadLibrary("gadget");
+
+    public static void load() {
+        // 关键修复：注释掉对 "libnfh.so" 的加载调用。
+        // 此库是用于Frida调试的可选组件，在您的项目中并未提供，因此加载它会导致闪退。
+        // 移除后，将禁用该调试功能，但不会影响BlackBox的核心虚拟化能力。
+        // System.loadLibrary("nfh");
+        Log.d("nfh", TAG + ".loadLibrary gadget - disabled");
     }
-    public static void load()
-    {
-        System.loadLibrary("nfh");
-        Log.d("nfh", TAG + ".loadLibrary gadget");
-//        System.loadLibrary("gadget");
-//        System.loadLibrary("frida-gadget");
-    }
+
     /**
      * 获取全部已加载的SO库
      */
     public static List<String> readProcMaps(){
         // 当前应用的进程ID
-        int pid = Process.myPid();
+        int pid = android.os.Process.myPid();
         String path = "/proc/" + pid + "/maps";
         File file = new File(path);
         List<String> list = new ArrayList<>();
@@ -56,6 +55,7 @@ public class GadgetUtils {
                     try {
                         reader.close();
                     } catch (IOException e1) {
+                        e1.printStackTrace();
                     }
                 }
             }
@@ -74,6 +74,7 @@ public class GadgetUtils {
             }
         }
     }
+
     /**
      * 获取全部已加载的SO库
      */

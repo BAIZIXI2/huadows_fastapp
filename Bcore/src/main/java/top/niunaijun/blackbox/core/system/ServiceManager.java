@@ -1,3 +1,5 @@
+// 文件路径: Bcore/src/main/java/top/niunaijun/blackbox/core/system/ServiceManager.java
+
 package top.niunaijun.blackbox.core.system;
 
 import android.os.IBinder;
@@ -10,6 +12,7 @@ import top.niunaijun.blackbox.BlackBoxCore;
 import top.niunaijun.blackbox.core.system.accounts.BAccountManagerService;
 import top.niunaijun.blackbox.core.system.am.BActivityManagerService;
 import top.niunaijun.blackbox.core.system.am.BJobManagerService;
+import top.niunaijun.blackbox.core.system.display.BDisplayManagerService;
 import top.niunaijun.blackbox.core.system.location.BLocationManagerService;
 import top.niunaijun.blackbox.core.system.notification.BNotificationManagerService;
 import top.niunaijun.blackbox.core.system.os.BStorageManagerService;
@@ -36,6 +39,13 @@ public class ServiceManager {
     public static final String ACCOUNT_MANAGER = "account_manager";
     public static final String LOCATION_MANAGER = "location_manager";
     public static final String NOTIFICATION_MANAGER = "notification_manager";
+    public static final String DISPLAY_MANAGER = "display_manager";
+    
+    // ====================== 代码修改开始 ======================
+    // 新增：为我们的认证服务定义一个唯一的名称
+    public static final String AUTH_SERVICE = "auth_service";
+    // ====================== 代码修改结束 ======================
+    
     public static final String TAG = "ServiceManager";
 
     private final Map<String, IBinder> mCaches = new HashMap<>();
@@ -65,7 +75,23 @@ public class ServiceManager {
         mCaches.put(ACCOUNT_MANAGER, BAccountManagerService.get());
         mCaches.put(LOCATION_MANAGER, BLocationManagerService.get());
         mCaches.put(NOTIFICATION_MANAGER, BNotificationManagerService.get());
+        mCaches.put(DISPLAY_MANAGER, BDisplayManagerService.get());
     }
+
+    // ====================== 代码修改开始 ======================
+    /**
+     * 提供一个公共方法用于在运行时添加服务。
+     * @param name 服务名称
+     * @param service 服务的 Binder 对象
+     */
+    public void addService(String name, IBinder service) {
+        if (name == null || service == null) {
+            return;
+        }
+        mCaches.put(name, service);
+        Log.d(TAG, "addService: " + name);
+    }
+    // ====================== 代码修改结束 ======================
 
     public IBinder getServiceInternal(String name) {
         return mCaches.get(name);
@@ -82,5 +108,10 @@ public class ServiceManager {
         BlackBoxCore.get().getService(ACCOUNT_MANAGER);
         BlackBoxCore.get().getService(LOCATION_MANAGER);
         BlackBoxCore.get().getService(NOTIFICATION_MANAGER);
+        BlackBoxCore.get().getService(DISPLAY_MANAGER);
+        // ====================== 代码修改开始 ======================
+        // 在客户端初始化时，也尝试获取我们的认证服务，以便建立连接
+        BlackBoxCore.get().getService(AUTH_SERVICE);
+        // ====================== 代码修改结束 ======================
     }
 }

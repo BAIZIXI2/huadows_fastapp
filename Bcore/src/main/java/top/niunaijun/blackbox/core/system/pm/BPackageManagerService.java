@@ -1,3 +1,4 @@
+// --- 修改后文件: Bcore/src/main/java/top/niunaijun/blackbox/core/system/pm/BPackageManagerService.java ---
 package top.niunaijun.blackbox.core.system.pm;
 
 import android.content.BroadcastReceiver;
@@ -37,6 +38,7 @@ import top.niunaijun.blackbox.core.system.ProcessRecord;
 import top.niunaijun.blackbox.core.system.user.BUserHandle;
 import top.niunaijun.blackbox.core.system.user.BUserInfo;
 import top.niunaijun.blackbox.core.system.user.BUserManagerService;
+import top.niunaijun.blackbox.entity.pm.BStorageInfo;
 import top.niunaijun.blackbox.entity.pm.InstallOption;
 import top.niunaijun.blackbox.entity.pm.InstallResult;
 import top.niunaijun.blackbox.entity.pm.InstalledPackage;
@@ -46,6 +48,7 @@ import top.niunaijun.blackbox.utils.Slog;
 import top.niunaijun.blackbox.utils.compat.PackageParserCompat;
 import top.niunaijun.blackbox.utils.compat.XposedParserCompat;
 
+import static android.content.pm.PackageManager.GET_META_DATA;
 import static android.content.pm.PackageManager.MATCH_DIRECT_BOOT_UNAWARE;
 
 
@@ -662,6 +665,30 @@ public class BPackageManagerService extends IBPackageManagerService.Stub impleme
             }
             return packages.toArray(new String[]{});
         }
+    }
+
+    @Override
+    public BStorageInfo getStorageInfo(String packageName, int userId) throws RemoteException {
+        BPackageSettings ps = mPackages.get(packageName);
+        if (ps == null) {
+            return null;
+        }
+        BStorageInfo bStorageInfo = new BStorageInfo();
+        bStorageInfo.appSize = new File(ps.pkg.baseCodePath).length();
+        bStorageInfo.dataSize = FileUtils.getDirSize(BEnvironment.getDataDir(packageName, userId));
+        bStorageInfo.cacheSize = FileUtils.getDirSize(BEnvironment.getDataCacheDir(packageName, userId));
+        bStorageInfo.totalSize = bStorageInfo.appSize + bStorageInfo.dataSize; // Cache is part of data
+        return bStorageInfo;
+    }
+
+    @Override
+    public boolean clearCache(String packageName, int userId) throws RemoteException {
+        BPackageSettings ps = mPackages.get(packageName);
+        if (ps == null) {
+            return false;
+        }
+        File cacheDir = BEnvironment.getDataCacheDir(packageName, userId);
+        return FileUtils.clearDir(cacheDir);
     }
 
     private InstallResult installPackageAsUserLocked(String file, InstallOption option, int userId) {

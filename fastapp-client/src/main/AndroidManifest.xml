@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.huadows.fastapp.client">
+
+    <!-- 关键：在 Android 11 (API 30) 及以上，必须声明要查询的服务，否则 bindService 会失败 -->
+    <queries>
+        <package android:name="com.huadows.fastapp" />
+    </queries>
+
+</manifest>

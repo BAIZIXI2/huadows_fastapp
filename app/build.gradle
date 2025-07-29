@@ -1,183 +1,93 @@
+// --- START OF FILE 快应用/app/build.gradle ---
+
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
-    id "org.jetbrains.kotlin.kapt"
-    id 'com.yanzhenjie.andserver'
+   // id 'kotlin-android' // <--- 新增此行，应用 Kotlin 主插件
+ //   id 'kotlin-kapt'
+ id 'com.yanzhenjie.andserver' // <--- 新增此行，应用 AndServer 插件
 }
 
-
 android {
-    compileSdkVersion 29
+    compileSdkVersion 34
 
     defaultConfig {
-        applicationId "top.niunaijun.blackboxa"
+        applicationId "com.huadows.fastapp"
         minSdk 26
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 13
-        versionName "24.6.22.0"
-
-        flavorDimensions "BlackBox64"
+        versionCode 1
+        versionName "1.0"
+        
+        flavorDimensions "FastApp"
     }
-
+    
     productFlavors {
-        BlackBox32 {
-            applicationId "top.niunaijun.blackboxa32"
+        FastApp32 {
+            applicationId "com.huadows.fastapp"
             ndk {
                 abiFilters "armeabi-v7a"
             }
-            resValue "string", "app_name", "BlackBox32"
-            manifestPlaceholders = [APP_ICON      : "@mipmap/ic_launcher",
-                                    APP_ROUND_ICON: "@mipmap/ic_launcher_round"]
+            resValue "string", "app_name", "华软快应用"
+            manifestPlaceholders = [APP_ICON: "@mipmap/ic_launcher"]
         }
 
-        BlackBox64 {
-            applicationId "top.niunaijun.blackboxa64"
+
+
+        FastApp64 {
+            applicationId "com.huadows.fastapp64"
             ndk {
                 abiFilters "arm64-v8a"
             }
-            resValue "string", "app_name", "BlackBox64"
-            manifestPlaceholders = [APP_ICON      : "@mipmap/ic_launcher",
-                                    APP_ROUND_ICON: "@mipmap/ic_launcher_round"]
-        }
-
-        BlackBox32Beta {
-            applicationId "top.niunaijun.blackboxa32_beta"
-            ndk {
-                abiFilters "armeabi-v7a"
-            }
-            resValue "string", "app_name", "BlackBox32 Beta"
-            manifestPlaceholders = [APP_ICON      : "@mipmap/ic_launcher_beta",
-                                    APP_ROUND_ICON: "@mipmap/ic_launcher_round_beta"]
-        }
-
-        BlackBox64Beta {
-            applicationId "top.niunaijun.blackboxa64_beta"
-            ndk {
-                abiFilters "arm64-v8a"
-            }
-            resValue "string", "app_name", "BlackBox64 Beta"
-            manifestPlaceholders = [APP_ICON      : "@mipmap/ic_launcher_round_beta",
-                                    APP_ROUND_ICON: "@mipmap/ic_launcher_round_beta"]
+            resValue "string", "app_name", "华软快应用(64位)"
+            manifestPlaceholders = [APP_ICON: "@mipmap/ic_launcher"]
         }
     }
 
     buildTypes {
-        debug {
-            debuggable true
-            jniDebuggable true
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
-    buildFeatures {
-        viewBinding true
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-    dexOptions {
-        preDexLibraries false
-        maxProcessCount 8
-        javaMaxHeapSize "4g"
-    }
+    
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    aaptOptions {
-        cruncherEnabled = false
-        useNewCruncher = false
-    }
-    testOptions {
-        unitTests.returnDefaultValues = true
-    }
-    lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
-        warningsAsErrors false
-        disable "UnusedResources", 'RestrictedApi'
-        textOutput "stdout"
-        textReport false
-        check 'NewApi', 'InlinedApi'
-    }
+
     sourceSets {
-            main {
-              jniLibs.srcDirs = ['libs']
-          }
+        main {
+            jniLibs.srcDirs = ['libs']
         }
-    namespace 'top.niunaijun.blackboxa'
-}
-
-
-tasks.withType(Javadoc) {
-    options.addStringOption('Xdoclint:none', '-quiet')
-    options.addStringOption('encoding', 'UTF-8')
-    options.addStringOption('charSet', 'UTF-8')
-}
-
-
-repositories {
-    flatDir {
-        dirs 'libs'
+        
     }
+    buildFeatures {
+        aidl true
+    }
+    
+    namespace 'com.huadows.fastapp'
 }
 
 dependencies {
-//    compile fileTree(include: ['*.jar', "*.so"], dir: 'libs')
-    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
     implementation project(':Bcore')
 
-    //android
-    implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.3.0-rc01'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation "androidx.recyclerview:recyclerview:1.2.0"
-    implementation 'androidx.viewpager2:viewpager2:1.0.0'
-    implementation "androidx.activity:activity-ktx:1.2.2"
-    implementation "androidx.fragment:fragment-ktx:1.3.3"
-    implementation "androidx.preference:preference-ktx:1.1.1"
+    // AndroidX
 
-    //coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2"
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.google.android.material:material:1.9.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    
+    
+    implementation 'top.canyie.pine:core:0.2.9'
 
-    //viewModel liveData  lifecycle
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
-
-
-    //third
-
-    implementation 'com.tbuonomo:dotsindicator:4.2'
-    //viewPager2 指示点
-    implementation 'com.afollestad.material-dialogs:core:3.3.0'
-    implementation 'com.afollestad.material-dialogs:input:3.3.0'
-    //dialog
-    implementation 'com.github.nukc.stateview:kotlin:2.2.0'
-    //状态控制控件
-    implementation 'com.roger.catloadinglibrary:catloadinglibrary:1.0.9'
-    //加载dialog
-    implementation 'com.github.Ferfalk:SimpleSearchView:0.2.0'
-    //searchView
-    implementation 'com.github.Othershe:CornerLabelView:1.0.0'
-    //图标角标
-
-    // osmdroid
-    implementation 'org.osmdroid:osmdroid-android:6.1.11'
-    //adapter
-    implementation 'com.gitee.cbfg5210:RVAdapter:0.3.7'
-
-    //悬浮窗
-    implementation 'com.imuxuan:floatingview:1.6'
-    //web
-    implementation 'com.yanzhenjie.andserver:api:2.1.12'
-    kapt 'com.yanzhenjie.andserver:processor:2.1.12'
+    // 添加 android-ipc 依赖
+  //  implementation 'com.github.zhanggaoming.android-ipc:ipc-core:3.1.1'
+    // 添加注解处理器，用于自动注册服务
+    //kapt 'com.github.zhanggaoming.android-ipc:ipc-compiler:3.1.1'
+    
+    // 添加 AndServer 依赖实现Binder握手加web服务实现跨应用安全api调用
+    implementation 'com.yanzhenjie.andserver:api:2.1.12' 
+    annotationProcessor 'com.yanzhenjie.andserver:processor:2.1.12'
+    // 新增：添加 Gson 用于处理 JSON 序列化 
+    implementation 'com.google.code.gson:gson:2.9.0'
+    
 }

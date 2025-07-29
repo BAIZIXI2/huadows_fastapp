@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView; // 关键：确保引入的是 ImageView
 
 import androidx.annotation.Nullable;
 
@@ -56,7 +57,11 @@ public class LauncherActivity extends Activity {
         }
         Drawable drawable = packageInfo.applicationInfo.loadIcon(BlackBoxCore.getPackageManager());
         setContentView(R.layout.activity_launcher);
-        findViewById(R.id.iv_icon).setBackgroundDrawable(drawable);
+        
+        // 关键修改：使用 setImageDrawable 而不是 setBackgroundDrawable
+        // 这样可以确保图标本身被裁剪成圆形，而不是作为背景
+        ((ImageView) findViewById(R.id.iv_icon)).setImageDrawable(drawable);
+
         new Thread(() -> BlackBoxCore.getBActivityManager().startActivity(launchIntent, userId)).start();
     }
 

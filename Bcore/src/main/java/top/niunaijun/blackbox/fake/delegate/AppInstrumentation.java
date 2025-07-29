@@ -6,8 +6,11 @@ import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import java.lang.reflect.Field;
@@ -16,6 +19,7 @@ import black.android.app.BRActivity;
 import black.android.app.BRActivityThread;
 import top.niunaijun.blackbox.BlackBoxCore;
 import top.niunaijun.blackbox.app.BActivityThread;
+import top.niunaijun.blackbox.fake.frameworks.BDisplayManager;
 import top.niunaijun.blackbox.fake.hook.HookManager;
 import top.niunaijun.blackbox.fake.hook.IInjectHook;
 import top.niunaijun.blackbox.fake.service.HCallbackProxy;
@@ -106,6 +110,10 @@ public final class AppInstrumentation extends BaseInstrumentationDelegate implem
         HackAppUtils.enableQQLogOutput(activity.getPackageName(), activity.getClassLoader());
         checkHCallback();
         HookManager.get().checkEnv(IActivityClientProxy.class);
+
+        // 注入DPI修改逻辑
+        modifyActivityDisplay(activity);
+
         ActivityInfo info = BRActivity.get(activity).mActivityInfo();
         ContextCompat.fix(activity);
         ActivityCompat.fix(activity);
@@ -113,6 +121,44 @@ public final class AppInstrumentation extends BaseInstrumentationDelegate implem
             activity.getTheme().applyStyle(info.theme, true);
         }
         ActivityManagerCompat.setActivityOrientation(activity, info.screenOrientation);
+    }
+
+    private void modifyActivityDisplay(Activity activity) {
+        int dpi = BDisplayManager.get().getVirtualDPI(activity.getPackageName(), BActivityThread.getUserId());
+        if (dpi == 0) {
+            // DPI为0表示使用默认值，不做任何修改
+            return;
+        }
+
+        try {
+            Resources resources = activity.getResources();
+            DisplayMetrics oldMetrics = resources.getDisplayMetrics();
+
+            // 如果DPI没有变化，则无需修改
+            if (oldMetrics.densityDpi == dpi) {
+                return;
+            }
+
+            DisplayMetrics newMetrics = new DisplayMetrics();
+            newMetrics.setTo(oldMetrics); // 复制原始值
+
+            // 修改DPI相关参数
+            newMetrics.densityDpi = dpi;
+            newMetrics.density = dpi / 160f;
+            newMetrics.scaledDensity = newMetrics.density * oldMetrics.scaledDensity / oldMetrics.density;
+
+            Configuration oldConfig = resources.getConfiguration();
+            Configuration newConfig = new Configuration(oldConfig);
+
+            // 修改Configuration中的DPI
+            newConfig.densityDpi = dpi;
+            
+            // 应用新的配置
+            resources.updateConfiguration(newConfig, newMetrics);
+            Log.d(TAG, "DPI for " + activity.getPackageName() + " has been changed to " + dpi);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to modify activity display metrics", e);
+        }
     }
 
     @Override

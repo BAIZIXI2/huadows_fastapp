@@ -1,3 +1,4 @@
+// --- 修改后文件: Bcore/src/main/aidl/top/niunaijun/blackbox/core/system/pm/IBPackageManagerService.aidl ---
 // IBPackageManagerService.aidl
 package top.niunaijun.blackbox.core.system.pm;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import top.niunaijun.blackbox.entity.pm.InstallResult;
 import top.niunaijun.blackbox.entity.pm.InstallOption;
 import top.niunaijun.blackbox.entity.pm.InstalledPackage;
+import top.niunaijun.blackbox.entity.pm.BStorageInfo;
 
 
 interface IBPackageManagerService {
@@ -46,4 +48,7 @@ interface IBPackageManagerService {
     boolean isInstalled(String packageName, int userId);
     List<InstalledPackage> getInstalledPackagesAsUser(int userId);
     String[] getPackagesForUid(int uid, int userId);
+
+    BStorageInfo getStorageInfo(String packageName, int userId);
+    boolean clearCache(String packageName, int userId);
 }

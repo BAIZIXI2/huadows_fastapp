@@ -1,3 +1,5 @@
+// /Bcore/src/main/java/top/niunaijun/blackbox/core/system/DaemonService.java
+
 package top.niunaijun.blackbox.core.system;
 
 import android.app.NotificationManager;
@@ -10,7 +12,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import top.niunaijun.blackbox.BlackBoxCore;
-import top.niunaijun.blackbox.http.ServerManager;
+// import top.niunaijun.blackbox.http.ServerManager; // 删掉此行
 import top.niunaijun.blackbox.utils.compat.BuildCompat;
 
 
@@ -43,7 +45,7 @@ public class DaemonService extends Service {
         if (BuildCompat.isOreo()) {
             showNotification();
         }
-        ServerManager.startServer();
+        // ServerManager.startServer(); // 删掉此行
         return START_STICKY;
     }
 

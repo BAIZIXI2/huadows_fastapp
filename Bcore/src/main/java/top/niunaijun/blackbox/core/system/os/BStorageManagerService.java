@@ -1,3 +1,5 @@
+// Bcore/src/main/java/top/niunaijun/blackbox/core/system/os/BStorageManagerService.java
+
 package top.niunaijun.blackbox.core.system.os;
 
 import android.net.Uri;
@@ -37,6 +39,8 @@ public class BStorageManagerService extends IBStorageManagerService.Stub impleme
 
     @Override
     public StorageVolume[] getVolumeList(int uid, String packageName, int flags, int userId) throws RemoteException {
+        // ====================== 代码修改开始 ======================
+        // 恢复原始的伪造路径逻辑
         if (BRStorageManager.get().getVolumeList(0, 0) == null) {
             return null;
         }
@@ -55,6 +59,7 @@ public class BStorageManagerService extends IBStorageManagerService.Stub impleme
             e.printStackTrace();
         }
         return null;
+        // ====================== 代码修改结束 ======================
     }
 
     @Override

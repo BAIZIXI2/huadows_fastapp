@@ -1,9 +1,12 @@
+// /Bcore/src/main/java/top/niunaijun/blackbox/fake/service/IActivityManagerProxy.java
+
 package top.niunaijun.blackbox.fake.service;
 
 import android.Manifest;
 import android.app.ActivityManager;
 import android.app.IServiceConnection;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -41,6 +44,7 @@ import top.niunaijun.blackbox.fake.hook.ClassInvocationStub;
 import top.niunaijun.blackbox.fake.hook.MethodHook;
 import top.niunaijun.blackbox.fake.hook.ProxyMethod;
 import top.niunaijun.blackbox.fake.hook.ScanClass;
+import top.niunaijun.blackbox.fake.install.InstallInterceptor; // 确保引入
 import top.niunaijun.blackbox.fake.service.base.PkgMethodProxy;
 import top.niunaijun.blackbox.fake.service.context.providers.ContentProviderStub;
 import top.niunaijun.blackbox.proxy.ProxyManifest;
@@ -56,14 +60,6 @@ import top.niunaijun.blackbox.utils.compat.TaskDescriptionCompat;
 import static android.content.pm.PackageManager.GET_META_DATA;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-/**
- * Created by Milk on 3/30/21.
- * * ∧＿∧
- * (`･ω･∥
- * 丶　つ０
- * しーＪ
- * 此处无Bug
- */
 @ScanClass(ActivityManagerCommonProxy.class)
 public class IActivityManagerProxy extends ClassInvocationStub {
     public static final String TAG = "ActivityManagerStub";
@@ -103,6 +99,53 @@ public class IActivityManagerProxy extends ClassInvocationStub {
         addMethodHook(new PkgMethodProxy("reportJunkFromApp"));
     }
 
+    @ProxyMethod("startActivity")
+    public static class StartActivity extends MethodHook {
+
+        @Override
+        protected Object hook(Object who, Method method, Object[] args) throws Throwable {
+            int intentIndex = getIntentIndex(args);
+            if (intentIndex == -1) {
+                return method.invoke(who, args);
+            }
+            Intent intent = (Intent) args[intentIndex];
+
+            // ======================= 关键修改点 =======================
+            // 调用我们的拦截器
+            if (InstallInterceptor.intercept(intent)) {
+                // 如果拦截成功，直接返回0，表示操作已处理，不再执行原始的startActivity方法
+                return 0;
+            }
+            // =============================================================
+
+            // 如果不是安装意图，则让黑盒的通用启动流程 ActivityManagerCommonProxy 接管
+            return method.invoke(who, args);
+        }
+
+        private int getIntentIndex(Object[] args) {
+            if (args == null) return -1;
+            for (int i = 0; i < args.length; i++) {
+                if (args[i] instanceof Intent) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+    }
+
+    // ======================= 关键修改点 =======================
+    // 新增一个对 startActivityForResult 的 Hook，逻辑与StartActivity一致
+    // =============================================================
+    @ProxyMethod("startActivityForResult")
+    public static class StartActivityForResult extends StartActivity {
+        // 逻辑与 StartActivity 完全一致，直接继承即可
+    }
+
+    // 省略其他方法...
+    // ...
+    // ... 保持 IActivityManagerProxy 文件中其他钩子方法不变
+    // ...
+    // 以下省略了该文件中其他的内部类钩子，请保持它们的原样
     @ProxyMethod("getContentProvider")
     public static class GetContentProvider extends MethodHook {
         @Override
@@ -129,18 +172,6 @@ public class IActivityManagerProxy extends ClassInvocationStub {
 
                     ProviderInfo providerInfo = BlackBoxCore.getBPackageManager().resolveContentProvider((String) auth, GET_META_DATA, BActivityThread.getUserId());
                     if (providerInfo == null) {
-//                        Log.d(TAG, "hook system: " + auth);
-//                        Object invoke = method.invoke(who, args);
-//                        if (invoke != null) {
-//                            Object provider = Reflector.with(invoke)
-//                                    .field("provider")
-//                                    .get();
-//                            if (provider != null && !(provider instanceof Proxy)) {
-//                                Reflector.with(invoke)
-//                                        .field("provider")
-//                                        .set(new SettingsProviderStub().wrapper((IInterface) provider, BlackBoxCore.getHostPkg()));
-//                            }
-//                        }
                         return null;
                     }
 
@@ -172,7 +203,6 @@ public class IActivityManagerProxy extends ClassInvocationStub {
         }
 
         private int getAuthIndex() {
-            // 10.0
             if (BuildCompat.isQ()) {
                 return 2;
             } else {
@@ -551,10 +581,6 @@ public class IActivityManagerProxy extends ClassInvocationStub {
     public static class setServiceForeground extends MethodHook {
         @Override
         protected Object hook(Object who, Method method, Object[] args) throws Throwable {
-//            if (args[0] instanceof ComponentName) {
-//                args[0] = new ComponentName(BlackBoxCore.getHostPkg(), ProxyManifest.getProxyService(BActivityThread.getAppPid()));
-//            }
-//            return method.invoke(who, args);
             return 0;
         }
     }

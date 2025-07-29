@@ -1,3 +1,4 @@
+// --- START OF FILE Bcore/src/main/java/top/niunaijun/blackbox/core/system/BlackBoxSystem.java ---
 package top.niunaijun.blackbox.core.system;
 
 import android.content.pm.PackageInfo;
@@ -15,6 +16,7 @@ import top.niunaijun.blackbox.core.env.BEnvironment;
 import top.niunaijun.blackbox.core.system.accounts.BAccountManagerService;
 import top.niunaijun.blackbox.core.system.am.BActivityManagerService;
 import top.niunaijun.blackbox.core.system.am.BJobManagerService;
+import top.niunaijun.blackbox.core.system.display.BDisplayManagerService;
 import top.niunaijun.blackbox.core.system.location.BLocationManagerService;
 import top.niunaijun.blackbox.core.system.notification.BNotificationManagerService;
 import top.niunaijun.blackbox.core.system.os.BStorageManagerService;
@@ -53,6 +55,13 @@ public class BlackBoxSystem {
         return sBlackBoxSystem;
     }
 
+    // [新增] 公共方法，用于从外部（如app模块）添加需要初始化的系统服务
+    public void addSystemService(ISystemService service) {
+        if (service != null && !mServices.contains(service)) {
+            mServices.add(service);
+        }
+    }
+
     public void startup() {
         if (isStartup.getAndSet(true))
             return;
@@ -69,7 +78,10 @@ public class BlackBoxSystem {
         mServices.add(BAccountManagerService.get());
         mServices.add(BLocationManagerService.get());
         mServices.add(BNotificationManagerService.get());
+        mServices.add(BDisplayManagerService.get());
 
+        // startup() 方法被调用时，外部服务已经被 addSystemService 添加进来了
+        // 所以这里的循环会正确地调用所有服务的 systemReady()
         for (ISystemService service : mServices) {
             service.systemReady();
         }
@@ -99,3 +111,4 @@ public class BlackBoxSystem {
         }
     }
 }
+// --- END OF FILE Bcore/src/main/java/top/niunaijun/blackbox/core/system/BlackBoxSystem.java ---

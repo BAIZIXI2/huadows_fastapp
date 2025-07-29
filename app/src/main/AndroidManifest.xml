@@ -1,46 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-    <!-- Android 11 需要 -->
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.huadows.fastapp">
+
+
+  <!-- 
+      Android 11 (API 30) 及以上版本，推荐使用 MANAGE_EXTERNAL_STORAGE 权限来访问所有文件。
+      这需要用户在设置中手动授予。对于API 29及以下，requestLegacyExternalStorage="true" 
+      和传统的读写权限仍然有效。
+    -->
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
+    <!--
+      为了简单起见，这里保留了传统的读写权限，
+      它在 requestLegacyExternalStorage="true" 的情况下对 Android 10 (API 29) 有效。
+    -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
 
     <application
-        android:name=".app.App"
+        android:name=".App"
         android:allowBackup="true"
         android:icon="${APP_ICON}"
         android:label="@string/app_name"
-        android:networkSecurityConfig="@xml/network_security_config"
-        android:roundIcon="${APP_ROUND_ICON}"
+        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BlackBox"
-        tools:targetApi="n">
+        android:theme="@style/AppTheme"
+    
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+
         <activity
-            android:name=".view.fake.FollowMyLocationOverlay"
-            android:exported="false" />
-        <activity android:name=".view.setting.SettingActivity" />
-        <activity android:name=".view.gms.GmsManagerActivity" />
+            android:name=".view.RiskWarningActivity"
+            android:exported="true"/>
+
+   
         <activity
-            android:name=".view.main.WelcomeActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/WelcomeTheme">
+            android:name=".view.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.list.ListActivity" />
-        <activity android:name=".view.fake.FakeManagerActivity" />
-        <activity android:name=".view.xp.XpActivity" />
+        
         <activity
-            android:name=".view.main.ShortcutActivity"
-            android:excludeFromRecents="true"
-            android:exported="true" />
-        <activity android:name=".view.main.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
+            android:name=".view.ErrorActivity"
+            android:exported="false"
+            android:process=":error_process" />
+            
+        <activity
+            android:name=".view.InstallChooserActivity"
+            android:exported="false"
+        
+            android:excludeFromRecents="true" />
+            
+            
+        <activity
+            android:name=".view.AppManageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/> 
+            
+        <activity
+    android:name=".view.AppDataManagerActivity"/>
+    
+    <activity 
+        android:name=".view.InstructionsActivity"
+     android:exported="false"/>
+     
+
+
+    <!-- 新增：用于启动服务进程的引导 Activity -->
+    <activity
+        android:name=".server.ProcessBootstrapActivity"
+        android:process=":blackbox"
+        android:exported="true"
+        android:theme="@android:style/Theme.Translucent.NoTitleBar"
+        android:taskAffinity="com.huadows.fastapp.bootstrap"
+        android:excludeFromRecents="true"
+        />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+   
+   
+   
+<!-- 新增：导出的握手服务 -->
+    <!-- 注意：此服务应在 BlackBox 的服务进程中运行 -->
+    <service
+        android:name=".server.ExportedAuthService"
+        android:process=":blackbox" 
+        android:exported="true">
+        <!-- 你可以添加一个自定义权限来增加安全性 -->
+        <!-- android:permission="com.huadows.fastapp.permission.ACCESS_AUTH_SERVICE" -->
+    </service>
+            
+
+   
+   
     </application>
 
 </manifest>

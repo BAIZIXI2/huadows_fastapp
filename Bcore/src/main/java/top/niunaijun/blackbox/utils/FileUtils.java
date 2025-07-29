@@ -1,3 +1,4 @@
+// --- 修改后文件: Bcore/src/main/java/top/niunaijun/blackbox/utils/FileUtils.java ---
 package top.niunaijun.blackbox.utils;
 
 import android.content.Context;
@@ -164,6 +165,9 @@ public class FileUtils {
     }
 
     public static int deleteDir(File dir) {
+        if (dir == null || !dir.exists()) {
+            return 0;
+        }
         int count = 0;
         if (dir.isDirectory()) {
             boolean link = false;
@@ -173,9 +177,11 @@ public class FileUtils {
                 //ignore
             }
             if (!link) {
-                String[] children = dir.list();
-                for (String file : children) {
-                    count += deleteDir(new File(dir, file));
+                File[] children = dir.listFiles();
+                if (children != null) {
+                    for (File file : children) {
+                        count += deleteDir(file);
+                    }
                 }
             }
         }
@@ -188,6 +194,50 @@ public class FileUtils {
     public static int deleteDir(String dir) {
         return deleteDir(new File(dir));
     }
+
+    public static boolean clearDir(File dir) {
+        if (dir == null || !dir.exists() || !dir.isDirectory()) {
+            return false;
+        }
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return true;
+        }
+        boolean success = true;
+        for (File file : files) {
+            if (file.isDirectory()) {
+                if (deleteDir(file) == 0) {
+                    success = false;
+                }
+            } else {
+                if (!file.delete()) {
+                    success = false;
+                }
+            }
+        }
+        return success;
+    }
+
+
+    public static long getDirSize(File dir) {
+        if (dir == null || !dir.exists() || !dir.isDirectory()) {
+            return 0;
+        }
+        long size = 0;
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return 0;
+        }
+        for (File file : files) {
+            if (file.isFile()) {
+                size += file.length();
+            } else {
+                size += getDirSize(file);
+            }
+        }
+        return size;
+    }
+
 
     public static void writeToFile(InputStream dataIns, File target) throws IOException {
         final int BUFFER = 1024;

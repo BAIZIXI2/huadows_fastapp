@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#3F3F3F</color>
-    <color name="primary_dark">#3F3F3F</color>
-    <color name="primary_light">#3F3F3F</color>
-    <color name="accent">#ffffff</color>
-    <color name="primary_text">#212121</color>
-    <color name="secondary_text">#757575</color>
+    <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    
+    <color name="app_background_dark">#121212</color> <!-- 一个更柔和的黑色，比纯黑#000000更护眼 -->
+    <color name="accent_orange">#FF9800</color> <!-- 橙色重点色 -->
+    <color name="button_grey">#424242</color>   <!-- 灰色按钮背景 -->
+    <color name="button_orange">@color/accent_orange</color>  <!-- 橙色按钮背景 -->
+    <color name="text_secondary_dark">#B3FFFFFF</color> <!-- 辅助文字颜色 (70%透明度的白色) -->
+    
+    <color name="warning_icon_orange">@color/accent_orange</color>
+    <color name="warning_text_color">#E0E0E0</color>
+    
+    <color name="switch_thumb_color">#FFC107</color> <!-- Switch 滑块颜色 -->
+    <color name="switch_track_color">#66FFC107</color> <!-- Switch 轨道颜色 (半透明) -->
+    
+    <color name="dialog_background_dark">#2C2C2C</color> <!-- 深色弹窗背景 -->>
+    <color name="dialog_text_color_title">#FFFFFF</color>   <!-- 标题文字颜色 (白色) -->
+    <color name="dialog_text_color_message">#E0E0E0</color> <!-- 内容文字颜色 (浅灰) -->
+    <color name="dialog_button_text_color">#FFFFFF</color>  <!-- 按钮文字颜色 (白色) -->
 </resources>
+
+
+
+
+   

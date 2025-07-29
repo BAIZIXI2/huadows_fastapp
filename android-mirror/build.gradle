@@ -1,5 +1,9 @@
+// --- START OF FILE 快应用/android-mirror/build.gradle ---
+
 plugins {
     id 'com.android.library'
+    id 'kotlin-android' // <--- 新增此行，应用 Kotlin 插件
+    id 'kotlin-kapt'
 }
 
 android {
@@ -34,5 +38,5 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation project(':Bcore:black-fake')
     implementation "com.github.CodingGay.BlackReflection:core:$rootProject.ext.blackReflection"
-    annotationProcessor "com.github.CodingGay.BlackReflection:compiler:$rootProject.ext.blackReflection"
+    kapt "com.github.CodingGay.BlackReflection:compiler:$rootProject.ext.blackReflection"
 }

@@ -1,3 +1,4 @@
+// --- 修改后文件: Bcore/src/main/java/top/niunaijun/blackbox/fake/frameworks/BPackageManager.java ---
 package top.niunaijun.blackbox.fake.frameworks;
 
 import android.content.ComponentName;
@@ -17,6 +18,7 @@ import top.niunaijun.blackbox.BlackBoxCore;
 import top.niunaijun.blackbox.app.BActivityThread;
 import top.niunaijun.blackbox.core.system.ServiceManager;
 import top.niunaijun.blackbox.core.system.pm.IBPackageManagerService;
+import top.niunaijun.blackbox.entity.pm.BStorageInfo;
 import top.niunaijun.blackbox.entity.pm.InstallOption;
 import top.niunaijun.blackbox.entity.pm.InstallResult;
 import top.niunaijun.blackbox.entity.pm.InstalledPackage;
@@ -272,6 +274,24 @@ public class BPackageManager extends BlackManager<IBPackageManagerService> {
             e.printStackTrace();
         }
         return new String[]{};
+    }
+
+    public BStorageInfo getStorageInfo(String packageName, int userId) {
+        try {
+            return getService().getStorageInfo(packageName, userId);
+        } catch (RemoteException e) {
+            crash(e);
+        }
+        return null;
+    }
+
+    public boolean clearCache(String packageName, int userId) {
+        try {
+            return getService().clearCache(packageName, userId);
+        } catch (RemoteException e) {
+            crash(e);
+        }
+        return false;
     }
 
     private void crash(Throwable e) {

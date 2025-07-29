@@ -6,4 +6,13 @@
 
     <style name="LauncherTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
+    
+<!-- 定义一个圆形外观的样式 -->
+    <style name="ShapeAppearance.App.Circle" parent="">
+        <!-- 设置角的样式为圆角 -->
+        <item name="cornerFamily">rounded</item>
+        <!-- 设置圆角的大小为50%，对于正方形视图来说，这就是圆形 -->
+        <item name="cornerSize">50%</item>
+    </style>
+    
 </resources>

@@ -1,0 +1,39 @@
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+    
+}
+
+android {
+    namespace 'com.huadows.fastapp.client'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        aidl true
+    }
+}
+
+dependencies {
+    // 核心依赖：网络请求和JSON解析
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'com.google.code.gson:gson:2.9.0'
+
+    // AIDL接口依赖，需要能够访问IAuthService
+    // 注意：这里我们直接将AIDL文件复制到新模块中，使其完全独立
+}
