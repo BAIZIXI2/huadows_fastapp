@@ -1,0 +1,72 @@
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+}
+
+android {
+    namespace 'com.huadows.fastapp.client'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        aidl true
+    }
+
+    // vvvvvvvvvvvv 新增此 publishing 块 vvvvvvvvvvvv
+    // 这是 Android Gradle Plugin 7.0+ 的推荐方式
+    // 它会告诉AGP准备 "release" 这个构建变体用于发布
+    publishing {
+        singleVariant('release') {
+            withSourcesJar() // 可选，但强烈推荐：同时发布源码
+        }
+    }
+    // ^^^^^^^^^^^^ 新增内容结束 ^^^^^^^^^^^^
+}
+
+dependencies {
+     // 新增：添加 Gson 用于解析 JSON 响应
+    implementation 'com.google.code.gson:gson:2.9.0'
+
+    // 引入 OkHttp 用于发送网络请求
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+ 
+    implementation("androidx.appcompat:appcompat:1.6.1")
+  
+}
+
+
+// 用于配置Maven发布的 afterEvaluate 块
+afterEvaluate {
+    publishing {
+        publications {
+            // 'release' 这个名字要和 android.publishing 中定义的一致
+            release(MavenPublication) {
+                from components.release
+
+                // GAV 坐标
+                groupId = 'com.huadows.fastapp'
+                artifactId = 'client'
+                version = '1.0.0'
+            }
+        }
+        repositories {
+            mavenLocal()
+        }
+    }
+}
+

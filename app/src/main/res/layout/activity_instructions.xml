@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 根布局现在是 NestedScrollView，让所有内容都可以滚动 -->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:fillViewport="true"
+    tools:context=".view.InstructionsActivity">
+
+    <!-- 使用一个线性布局来垂直排列“标题栏”和“内容” -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="1dp">
+
+        <!-- 1. 顶部自定义标题栏 (现在是可滚动内容的一部分) -->
+        <!-- 将其高度设置为一个固定值，例如 ?attr/actionBarSize -->
+        <RelativeLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <ImageView
+                android:id="@+id/back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="12dp"
+                android:src="@drawable/ic_back_arrow"
+                app:tint="@android:color/white" />
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="应用使用说明"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <!-- 2. 实际内容区域 -->
+        <!-- 使用另一个 LinearLayout 来方便地设置内边距 (padding) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="1dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="安装应用相关"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="点击主界面右下角加号按钮来选择并安装应用到快应用内"
+                android:textColor="@android:color/darker_gray"
+                android:lineSpacingMultiplier="1.2"
+                android:textSize="16sp" />
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image1"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true" />
+
+
+             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="添加应用如果出现Unsupported Feature，请停用设置再安装一个文件管理器来选择apk文件，apk无需签名。推荐使用cx文件管理器，安装完成后请务必启用设置"
+                android:textColor="@android:color/darker_gray"
+                android:lineSpacingMultiplier="1.2"
+                android:textSize="16sp" />
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image2"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image3"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="选择完毕后会提示正在安装，安装完毕后应用会出现在主页，点击即可启动"
+                android:textColor="@android:color/darker_gray"
+                android:lineSpacingMultiplier="1.2"
+                android:textSize="16sp" />
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image4"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="应用管理相关"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="长按主页应用即可进入对应应用的管理页面"
+                android:textColor="@android:color/darker_gray"
+                android:lineSpacingMultiplier="1.2"
+                android:textSize="16sp" />
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image5"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="应用管理页面会显示应用图标和版本名称，版本号。管理页面提供了很多操作按钮，包括了卸载，强行停止，清除数据，清除缓存，下载APK，修改DPI。这里说明两点，APK会被下载到Download文件夹下，界面上会提示具体路径。修改DPI功能的默认DPI是当前设备的DPI，修改完DPI后需要强行停止应用来生效。输入0来恢复默认DPI"
+                android:textColor="@android:color/darker_gray"
+                android:lineSpacingMultiplier="1.2"
+                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image6"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image7"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image8"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="页面最底部是应用的存储占用信息，允许访问设备存储功能在发布版已被删除"
+                android:textColor="@android:color/darker_gray"
+                android:lineSpacingMultiplier="1.2"
+                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image9"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="应用数据管理相关"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="通过应用数据管理功能，你可以导出导出一个或多个应用数据，包括data和Android/data下的数据，注意导出不能保留应用安装包和Android/media目录数据和其它目录下的应用数据，后续可能会添加这些功能。"
+                android:textColor="@android:color/darker_gray"
+                android:lineSpacingMultiplier="1.2"
+                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image10"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="选择要导出数据的应用后，点击导出按钮，数据会被打包成一个zip文件，输出到Download文件夹下，具体详见导出完成提示"
+                android:textColor="@android:color/darker_gray"
+                android:lineSpacingMultiplier="1.2"
+                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image11"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image12"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="关于应用数据导入，点击导入按钮并选择导出的数据zip文件夹后，应用会弹出窗口提示确认导入的应用。如果提示Unsupported Feature则按照上文一样的步骤操作。确认没问题后点击确定按钮等待导入完成，停止对应的应用来确保生效。如果出现检验失败则说明安装包内的应用数据被修改。注意，导入数据会完全清空当前的应用数据，请提示备份数据或导出数据"
+                android:textColor="@android:color/darker_gray"
+                android:lineSpacingMultiplier="1.2"
+                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image13"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image14"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image15"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true" />
+                
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="其它提示"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="在内部应用内尝试安装APK会弹出安装选择界面，可以选择安装到快应用内或者调用系统安装器安装，在内置升级时非常方便"
+                android:textColor="@android:color/darker_gray"
+                android:lineSpacingMultiplier="1.2"
+                android:textSize="16sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="如果快应用出现卡死或无限闪退情况，请尝试杀死后台或直接重启"
+                android:textColor="@android:color/darker_gray"
+                android:lineSpacingMultiplier="1.2"
+                android:textSize="16sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="安装快应用到快应用内即可触发隐藏彩蛋😈💅"
+                android:textColor="@android:color/darker_gray"
+                android:lineSpacingMultiplier="1.2"
+                android:textSize="16sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="内部应用是访问不到本机的文图片的，应用列表也只能获取到快应用内安装的应用。如果想让内部的应用访问到文件请手动复制到/storage/emulated/0/Android/data/com.huadows.fastapp/files/blackbox/storage/emulated/0/目录下，相对应的内部应用产生的文件也在该目录下"
+                android:textColor="@android:color/darker_gray"
+                android:lineSpacingMultiplier="1.2"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

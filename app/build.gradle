@@ -1,0 +1,93 @@
+// --- START OF FILE 快应用/app/build.gradle ---
+
+plugins {
+    id 'com.android.application'
+   // id 'kotlin-android' // <--- 新增此行，应用 Kotlin 主插件
+ //   id 'kotlin-kapt'
+ id 'com.yanzhenjie.andserver' // <--- 新增此行，应用 AndServer 插件
+}
+
+android {
+    compileSdkVersion 34
+
+    defaultConfig {
+        applicationId "com.huadows.fastapp"
+        minSdk 26
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        
+        flavorDimensions "FastApp"
+    }
+    
+    productFlavors {
+        FastApp32 {
+            applicationId "com.huadows.fastapp"
+            ndk {
+                abiFilters "armeabi-v7a"
+            }
+            resValue "string", "app_name", "华软快应用"
+            manifestPlaceholders = [APP_ICON: "@mipmap/ic_launcher"]
+        }
+
+
+
+        FastApp64 {
+            applicationId "com.huadows.fastapp64"
+            ndk {
+                abiFilters "arm64-v8a"
+            }
+            resValue "string", "app_name", "华软快应用(64位)"
+            manifestPlaceholders = [APP_ICON: "@mipmap/ic_launcher"]
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+        
+    }
+    buildFeatures {
+        aidl true
+    }
+    
+    namespace 'com.huadows.fastapp'
+}
+
+dependencies {
+    implementation project(':Bcore')
+
+    // AndroidX
+
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.google.android.material:material:1.9.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    
+    
+    implementation 'top.canyie.pine:core:0.2.9'
+
+    // 添加 android-ipc 依赖
+  //  implementation 'com.github.zhanggaoming.android-ipc:ipc-core:3.1.1'
+    // 添加注解处理器，用于自动注册服务
+    //kapt 'com.github.zhanggaoming.android-ipc:ipc-compiler:3.1.1'
+    
+    // 添加 AndServer 依赖实现Binder握手加web服务实现跨应用安全api调用
+    implementation 'com.yanzhenjie.andserver:api:2.1.12' 
+    annotationProcessor 'com.yanzhenjie.andserver:processor:2.1.12'
+    // 新增：添加 Gson 用于处理 JSON 序列化 
+    implementation 'com.google.code.gson:gson:2.9.0'
+    
+}

@@ -1,0 +1,9 @@
+include ':Bcore'
+include ':app'
+include ':Bcore:black-fake'
+include ':Bcore:black-hook'
+include ':android-mirror'
+include ':fastapp-client'
+include ':app-apidebug'
+
+rootProject.name = "快应用"

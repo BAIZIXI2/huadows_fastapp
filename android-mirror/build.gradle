@@ -1,0 +1,42 @@
+// --- START OF FILE 快应用/android-mirror/build.gradle ---
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android' // <--- 新增此行，应用 Kotlin 插件
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    aidlPackageWhiteList "android/app/IServiceConnection.aidl"
+    aidlPackageWhiteList "android/accounts/IAccountManagerResponse.aidl"
+
+    defaultConfig {
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+        minSdk 26
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        aidl true
+    }
+    namespace 'top.niunaijun.android_mirror'
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation project(':Bcore:black-fake')
+    implementation "com.github.CodingGay.BlackReflection:core:$rootProject.ext.blackReflection"
+    kapt "com.github.CodingGay.BlackReflection:compiler:$rootProject.ext.blackReflection"
+}
