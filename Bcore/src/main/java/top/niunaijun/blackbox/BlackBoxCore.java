@@ -1,3 +1,5 @@
+// Bcore/src/main/java/top/niunaijun/blackbox/BlackBoxCore.java
+
 package top.niunaijun.blackbox;
 
 import android.annotation.SuppressLint;
@@ -14,7 +16,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -56,7 +57,6 @@ import top.niunaijun.blackbox.fake.hook.HookManager;
 import top.niunaijun.blackbox.proxy.ProxyManifest;
 import top.niunaijun.blackbox.utils.FileUtils;
 import top.niunaijun.blackbox.utils.GadgetUtils;
-import top.niunaijun.blackbox.utils.ShellUtils;
 import top.niunaijun.blackbox.utils.Slog;
 import top.niunaijun.blackbox.utils.compat.BuildCompat;
 import top.niunaijun.blackbox.utils.compat.BundleCompat;
@@ -135,23 +135,27 @@ public class BlackBoxCore extends ClientConfiguration {
         String processName = getProcessName(getContext());
         if (processName.equals(BlackBoxCore.getHostPkg())) {
             mProcessType = ProcessType.Main;
-            // ====================== 代码修改开始 ======================
-            // startLogcat(); // 注释掉此行
-            // ====================== 代码修改结束 ======================
         } else if (processName.endsWith(getContext().getString(R.string.black_box_service_name))) {
             mProcessType = ProcessType.Server;
-        } else {
+        } else if (processName.contains(":p")) {
+            // ====================== 关键修复点 1: 精确判断虚拟应用进程 ======================
+            // 只有进程名中包含 ":p" (例如 com.huadows.fastapp:p0) 的才被认为是虚拟应用进程
             mProcessType = ProcessType.BAppClient;
+        } else {
+            // 其他所有进程（例如 :error_process）都按主进程对待，不进行Hook
+            mProcessType = ProcessType.Main;
         }
+
         boolean frida = false;
         if (BlackBoxCore.get().isBlackProcess()) {
             BEnvironment.load();
             if (processName.endsWith("p0")) {
                 frida = true;
-//                Log.d("nfh", processName);
-//                android.os.Debug.waitForDebugger();
             }
-//            android.os.Debug.waitForDebugger();
+            // 将Hook初始化逻辑严格限制在虚拟应用进程中
+            PineConfig.debug = true;
+            PineConfig.debuggable = true;
+            HookManager.get().init();
         }
         if (isServerProcess()) {
             if (clientConfiguration.isEnableDaemonService()) {
@@ -164,9 +168,6 @@ public class BlackBoxCore extends ClientConfiguration {
                 }
             }
         }
-        PineConfig.debug = true;
-        PineConfig.debuggable = true;
-        HookManager.get().init();
 
         if (frida && BlackBoxCore.get().isEnableFrida()) {
             GadgetUtils.load();
@@ -432,19 +433,6 @@ public class BlackBoxCore extends ClientConfiguration {
         return mClientConfiguration.requestInstallPackage(file, userId);
     }
 
-    private void startLogcat() {
-        // ====================== 代码修改开始 ======================
-        /*
-        new Thread(() -> {
-            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), getContext().getPackageName() + "_logcat.txt");
-            FileUtils.deleteDir(file);
-            ShellUtils.execCommand("logcat -c", false);
-            ShellUtils.execCommand("logcat -f " + file.getAbsolutePath(), false);
-        }).start();
-        */
-        // ====================== 代码修改结束 ======================
-    }
-
     private static String getProcessName(Context context) {
         int pid = Process.myPid();
         String processName = null;
@@ -470,7 +458,6 @@ public class BlackBoxCore extends ClientConfiguration {
     }
 
     private void initNotificationManager() {
-//        Log.d("nfh", TAG + ".initNotificationManager");
         NotificationManager nm = (NotificationManager) BlackBoxCore.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         String CHANNEL_ONE_ID = BlackBoxCore.getContext().getPackageName() + ".blackbox_core";
         String CHANNEL_ONE_NAME = "blackbox_core";
@@ -485,14 +472,6 @@ public class BlackBoxCore extends ClientConfiguration {
         }
     }
 
-    // =================================== 新增API ===================================
-
-    /**
-     * 获取虚拟应用的VersionName
-     * @param packageName 包名
-     * @param userId 用户ID
-     * @return VersionName, 获取失败则返回 null
-     */
     public String getPackageVersionName(String packageName, int userId) {
         PackageInfo packageInfo = getBPackageManager().getPackageInfo(packageName, 0, userId);
         if (packageInfo != null) {
@@ -501,12 +480,6 @@ public class BlackBoxCore extends ClientConfiguration {
         return null;
     }
 
-    /**
-     * 获取虚拟应用的VersionCode
-     * @param packageName 包名
-     * @param userId 用户ID
-     * @return VersionCode, 获取失败则返回 -1
-     */
     public long getPackageVersionCode(String packageName, int userId) {
         PackageInfo packageInfo = getBPackageManager().getPackageInfo(packageName, 0, userId);
         if (packageInfo != null) {
@@ -519,45 +492,19 @@ public class BlackBoxCore extends ClientConfiguration {
         return -1;
     }
 
-    /**
-     * 获取虚拟应用的存储信息
-     * @param packageName 包名
-     * @param userId 用户ID
-     * @return 存储信息对象 BStorageInfo, 获取失败则返回 null
-     */
     public BStorageInfo getStorageInfo(String packageName, int userId) {
         return getBPackageManager().getStorageInfo(packageName, userId);
     }
 
-    /**
-     * 清理虚拟应用的缓存
-     * @param packageName 包名
-     * @param userId 用户ID
-     * @return 是否清理成功
-     */
     public boolean clearPackageCache(String packageName, int userId) {
         return getBPackageManager().clearCache(packageName, userId);
     }
-    
-    /**
-     * 设置虚拟应用的DPI
-     * @param packageName 包名
-     * @param dpi         要设置的DPI值，例如 240, 320, 480。设置为 0 则恢复为默认DPI。
-     * @param userId      用户ID
-     */
+
     public void setVirtualDPI(String packageName, int dpi, int userId) {
         BDisplayManager.get().setVirtualDPI(packageName, dpi, userId);
     }
 
-    /**
-     * 获取虚拟应用的DPI
-     * @param packageName 包名
-     * @param userId      用户ID
-     * @return 自定义的DPI值，如果为0，表示使用默认DPI。
-     */
     public int getVirtualDPI(String packageName, int userId) {
         return BDisplayManager.get().getVirtualDPI(packageName, userId);
     }
-
-    // ==============================================================================
 }

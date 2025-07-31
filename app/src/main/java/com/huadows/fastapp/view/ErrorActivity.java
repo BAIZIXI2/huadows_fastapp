@@ -1,4 +1,3 @@
-// /app/src/main/java/com/huadows/fastapp/view/ErrorActivity.java
 package com.huadows.fastapp.view;
 
 import android.app.Activity;
@@ -6,83 +5,68 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.os.Process;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
-public class ErrorActivity extends Activity {
+import com.huadows.fastapp.R;
+
+public class ErrorActivity extends AppCompatActivity {
 
     public static final String EXTRA_ERROR_TEXT = "extra_error_text";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 设置新的布局文件
+        setContentView(R.layout.activity_error);
 
+        // 获取从 Intent 传递过来的错误信息
         final String errorText = getIntent().getStringExtra(EXTRA_ERROR_TEXT);
 
-        // 创建根布局 LinearLayout
-        LinearLayout rootLayout = new LinearLayout(this);
-        rootLayout.setOrientation(LinearLayout.VERTICAL);
-        rootLayout.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-        ));
-        rootLayout.setPadding(32, 32, 32, 32);
+        // 初始化视图
+        TextView errorTextView = findViewById(R.id.error_text);
+        Button copyButton = findViewById(R.id.button_copy_log);
+        Button exitButton = findViewById(R.id.button_force_exit);
 
-        // 创建标题
-        TextView title = new TextView(this);
-        title.setText("抱歉，程序出现异常");
-        title.setTextSize(20);
-        title.setGravity(Gravity.CENTER);
-        rootLayout.addView(title);
-
-        // 创建复制按钮
-        Button copyButton = new Button(this);
-        copyButton.setText("复制错误信息");
-        LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        buttonParams.gravity = Gravity.CENTER_HORIZONTAL;
-        buttonParams.setMargins(0, 20, 0, 20);
-        copyButton.setLayoutParams(buttonParams);
-        rootLayout.addView(copyButton);
-
-        // 创建滚动视图
-        ScrollView scrollView = new ScrollView(this);
-        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                0
-        );
-        scrollParams.weight = 1;
-        scrollView.setLayoutParams(scrollParams);
-        rootLayout.addView(scrollView);
-
-        // 创建显示错误信息的TextView
-        TextView errorTextView = new TextView(this);
+        // 显示错误信息
         errorTextView.setText(errorText);
-        errorTextView.setTextIsSelectable(true);
-        scrollView.addView(errorTextView);
 
-        // 设置复制按钮的点击事件
+        // 设置“复制日志”按钮的点击事件
         copyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("error_log", errorText);
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(ErrorActivity.this, "已复制到剪贴板", Toast.LENGTH_SHORT).show();
+                if (clipboard != null) {
+                    ClipData clip = ClipData.newPlainText("error_log", errorText);
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(ErrorActivity.this, "已复制到剪贴板", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-        // 将根布局设置为Activity的内容视图
-        setContentView(rootLayout);
+        // 设置“强制退出”按钮的点击事件
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 结束当前 Activity
+                finishAffinity();
+                // 杀死当前应用的所有进程
+                Process.killProcess(Process.myPid());
+                // 确保彻底退出
+                System.exit(1);
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        // 禁用返回键，让用户必须通过按钮退出
+        // 如果需要允许返回，可以删除此方法
     }
 }

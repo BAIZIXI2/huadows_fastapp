@@ -58,6 +58,28 @@
             android:excludeFromRecents="true" />
             
             
+        <!--
+         新增：外部安装确认 Activity
+         - android:label="安装到快应用" 将会显示在系统的 "打开方式" 列表中
+         - android:icon="@mipmap/ic_launcher" 指定了在 "打开方式" 列表中显示的图标
+         - android:theme="@style/Theme.Transparent" 使其成为一个没有界面的控制器
+        -->
+        <activity
+            android:name=".view.ExternalInstallActivity"
+            android:label="安装到快应用"
+            android:icon="@mipmap/ic_launcher"
+            android:theme="@style/Theme.Transparent"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:mimeType="application/vnd.android.package-archive" />
+            </intent-filter>
+        </activity>
+
+            
         <activity
             android:name=".view.AppManageActivity"
             android:screenOrientation="portrait"

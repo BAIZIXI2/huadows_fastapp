@@ -1,4 +1,4 @@
-// 文件路径: 快应用/Bcore/src/main/java/top/niunaijun/blackbox/utils/GadgetUtils.java
+// Bcore/src/main/java/top/niunaijun/blackbox/utils/GadgetUtils.java
 
 package top.niunaijun.blackbox.utils;
 
@@ -15,7 +15,8 @@ public class GadgetUtils {
     private static final String TAG = "nfh";
 
     public static void load() {
-        // 关键修复：注释掉对 "libnfh.so" 的加载调用。
+        // ====================== 关键修复点 2: 移除有问题的库加载 ======================
+        // 注释掉对 "libnfh.so" 的加载调用。
         // 此库是用于Frida调试的可选组件，在您的项目中并未提供，因此加载它会导致闪退。
         // 移除后，将禁用该调试功能，但不会影响BlackBox的核心虚拟化能力。
         // System.loadLibrary("nfh");

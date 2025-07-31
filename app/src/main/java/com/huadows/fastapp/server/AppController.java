@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.RemoteException;
 import android.util.Log;
+import android.net.Uri;
 
 import com.google.gson.Gson;
 import com.huadows.fastapp.server.bean.AppInfo;
@@ -151,12 +152,21 @@ public class AppController {
             return new JsonBody(gson.toJson(response));
         }
 
+        // 临时文件仍然在应用的私有缓存目录中创建
         File tempApk = new File(BlackBoxCore.getContext().getCacheDir(), UUID.randomUUID().toString() + ".apk");
         try {
             apkFile.transferTo(tempApk);
             Log.d(TAG, "APK uploaded to temporary file: " + tempApk.getAbsolutePath());
 
-            InstallResult installResult = BlackBoxCore.get().installPackageAsUser(tempApk, userId);
+            // ====================== 关键修复点 ======================
+            // 1. 将临时文件File对象转换为Uri
+            Uri apkUri = Uri.fromFile(tempApk);
+
+            // 2. 调用接收Uri的installPackageAsUser方法。
+            //    这个方法内部会设置FLAG_URI_FILE，从而触发CopyExecutor中的“移动”逻辑，
+            //    而不是“复制”逻辑。这可以避免文件句柄被长时间占用的问题。
+            InstallResult installResult = BlackBoxCore.get().installPackageAsUser(apkUri, userId);
+            // =======================================================
 
             if (installResult.success) {
                 response.put("status", "success");
@@ -172,17 +182,20 @@ public class AppController {
             response.put("status", "error");
             response.put("message", "An unexpected error occurred: " + e.getMessage());
         } finally {
+            // 这里的删除逻辑现在可以正常工作了。
+            // 如果文件被成功“移动”，tempApk.exists()会返回false，不会执行删除。
+            // 如果“移动”失败并回退到“复制”，或者安装过程早期失败，
+            // 这里的delete()会确保清理掉临时文件。
             if (tempApk.exists()) {
                 if (tempApk.delete()) {
                     Log.d(TAG, "Temporary APK file deleted.");
                 } else {
-                    Log.w(TAG, "Failed to delete temporary APK file.");
+                    Log.w(TAG, "Failed to delete temporary APK file, it might have been moved.");
                 }
             }
         }
         return new JsonBody(gson.toJson(response));
     }
-
     @PostMapping("/uninstall")
     public ResponseBody uninstall(@RequestParam("packageName") String packageName,
                                   @RequestParam("userId") int userId) {

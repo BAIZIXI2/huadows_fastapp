@@ -22,6 +22,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.IntDef;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable; // <--- 新增的导入语句
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -37,6 +38,8 @@ public class CustomDialog extends BottomSheetDialog {
     private View customContentView;
 
     // 添加对视图的引用，以便外部可以访问
+    private Button btnConfirm;
+    private Button btnCancel;
     private ProgressBar progressBarHorizontal;
     private TextView progressText;
     private TextView tvTitle;
@@ -139,10 +142,10 @@ public class CustomDialog extends BottomSheetDialog {
     private void initViews() {
         LinearLayout dialogRootContainer = findViewById(R.id.dialog_root_container);
         ImageView ivIcon = findViewById(R.id.dialog_icon);
-        this.tvTitle = findViewById(R.id.dialog_title); // 赋值给成员变量
-        this.tvMessage = findViewById(R.id.dialog_message); // 赋值给成员变量
-        Button btnConfirm = findViewById(R.id.btn_confirm);
-        Button btnCancel = findViewById(R.id.btn_cancel);
+        this.tvTitle = findViewById(R.id.dialog_title);
+        this.tvMessage = findViewById(R.id.dialog_message);
+        this.btnConfirm = findViewById(R.id.btn_confirm);
+        this.btnCancel = findViewById(R.id.btn_cancel);
         FrameLayout customViewContainer = findViewById(R.id.custom_view_container);
         LinearLayout buttonContainer = findViewById(R.id.button_container);
         LinearLayout progressContainer = findViewById(R.id.progress_container);
@@ -254,14 +257,20 @@ public class CustomDialog extends BottomSheetDialog {
         if (builder.cancelButtonText != null) btnCancel.setText(builder.cancelButtonText);
         btnConfirm.setVisibility(builder.confirmButtonVisible ? View.VISIBLE : View.GONE);
         btnCancel.setVisibility(builder.cancelButtonVisible ? View.VISIBLE : View.GONE);
+        
         btnConfirm.setOnClickListener(v -> {
             if (builder.listener != null) builder.listener.onConfirmClick();
-            dismiss();
+            if (builder.autoDismiss) {
+                dismiss();
+            }
         });
         btnCancel.setOnClickListener(v -> {
             if (builder.listener != null) builder.listener.onCancelClick();
-            dismiss();
+            if (builder.autoDismiss) {
+                dismiss();
+            }
         });
+
         applyScaleAnimationOnTouch(btnConfirm);
         applyScaleAnimationOnTouch(btnCancel);
         boolean isSingleButton = builder.confirmButtonVisible ^ builder.cancelButtonVisible;
@@ -337,6 +346,16 @@ public class CustomDialog extends BottomSheetDialog {
             this.tvMessage.setVisibility(message == null || message.length() == 0 ? View.GONE : View.VISIBLE);
         }
     }
+    
+    @Nullable
+    public Button getConfirmButton() {
+        return this.btnConfirm;
+    }
+
+    @Nullable
+    public Button getCancelButton() {
+        return this.btnCancel;
+    }
 
     public static class Builder {
         private final Context context;
@@ -354,6 +373,7 @@ public class CustomDialog extends BottomSheetDialog {
         private boolean showSpinner = false;
         private boolean showProgressBar = false;
         private CharSequence spinnerText;
+        private boolean autoDismiss = true;
 
         public Builder(Context context) { this.context = context; }
         public Builder setIcon(Drawable icon) { this.icon = icon; return this; }
@@ -375,19 +395,21 @@ public class CustomDialog extends BottomSheetDialog {
         public Builder showSpinner(boolean show, @StringRes int textResId) { return showSpinner(show, context.getString(textResId)); }
         public Builder showSpinner(boolean show, CharSequence text) { this.showSpinner = show; this.spinnerText = text; if (show) { this.showProgressBar = false; } return this; }
         public Builder showProgressBar(boolean show) { this.showProgressBar = show; if (show) { this.showSpinner = false; } return this; }
+
+        public Builder setAutoDismiss(boolean autoDismiss) {
+            this.autoDismiss = autoDismiss;
+            return this;
+        }
+
         public CustomDialog build() { return new CustomDialog(context, this); }
 
         public CustomDialog show() {
-            // ====================== 关键修复点 ======================
-            // 在显示对话框前，检查其关联的Context（通常是Activity）是否仍然有效
             if (context instanceof Activity) {
                 Activity activity = (Activity) context;
                 if (activity.isFinishing() || activity.isDestroyed()) {
-                    // Activity 已经或正在关闭，此时显示对话框会崩溃，所以直接返回 null
                     return null;
                 }
             }
-            // =======================================================
             CustomDialog dialog = build();
             dialog.show();
             return dialog;
