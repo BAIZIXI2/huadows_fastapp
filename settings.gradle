@@ -6,4 +6,4 @@ include ':android-mirror'
 include ':fastapp-client'
 include ':app-apidebug'
 
-rootProject.name = "快应用"
+rootProject.name = "华软快应用"
