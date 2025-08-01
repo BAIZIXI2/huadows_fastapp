@@ -4,6 +4,7 @@
 
 # 华软快应用
 
+##原作者对 VirtualApp & 山东盒一网络科技有限公司 的话，值得反复思考。
 > *The only people who have anything to fear from free software are those whose products are worth even less.*
 > <p align="right">— David Emery</p>
 
