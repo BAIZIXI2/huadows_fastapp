@@ -1,6 +1,7 @@
 package com.huadows.fastapp.view;
 
 import android.annotation.SuppressLint;
+import android.content.Context
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -14,7 +15,7 @@ import com.huadows.fastapp.App; // 导入App类来设置SharedPreferences
 import com.huadows.fastapp.R;
 
 public class RiskWarningActivity extends AppCompatActivity {
-
+    protected Context ctx;
     private Button buttonConfirm;
     private Button buttonCancel;
 
@@ -25,7 +26,8 @@ public class RiskWarningActivity extends AppCompatActivity {
 
         buttonConfirm = findViewById(R.id.button_confirm);
         buttonCancel = findViewById(R.id.button_cancel);
-
+        //applicationContext
+        ctx = this.getApplicationContext();
         // 设置点击事件
         buttonConfirm.setOnClickListener(v -> {
             setAgreedToRiskWarning(true); // 用户同意
@@ -75,12 +77,12 @@ public class RiskWarningActivity extends AppCompatActivity {
     }
 
     public static boolean hasAgreedToRiskWarning() {
-        SharedPreferences prefs = sContext.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences prefs = ctx.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return prefs.getBoolean(KEY_AGREE_RISK, false);
     }
 
     public static void setAgreedToRiskWarning(boolean agreed) {
-        SharedPreferences prefs = sContext.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences prefs = ctx.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(KEY_AGREE_RISK, agreed);
         editor.apply();
