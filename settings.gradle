@@ -4,6 +4,6 @@ include ':Bcore:black-fake'
 include ':Bcore:black-hook'
 include ':android-mirror'
 include ':fastapp-client'
-include ':app-apidebug'
-
+// include ':app-apidebug'
+// 不需要apidebug
 rootProject.name = "华软快应用"
