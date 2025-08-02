@@ -87,5 +87,5 @@ public class RiskWarningActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(KEY_AGREE_RISK, agreed);
         editor.apply();
-    
+    }
 }
