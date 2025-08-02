@@ -1,6 +1,7 @@
 package com.huadows.fastapp.view;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,13 +28,13 @@ public class RiskWarningActivity extends AppCompatActivity {
 
         // 设置点击事件
         buttonConfirm.setOnClickListener(v -> {
-            App.setAgreedToRiskWarning(true); // 用户同意
+            setAgreedToRiskWarning(true); // 用户同意
             setResult(RESULT_OK); // 设置结果为OK
             finish(); // 关闭当前Activity
         });
 
         buttonCancel.setOnClickListener(v -> {
-            App.setAgreedToRiskWarning(false); // 用户取消
+            setAgreedToRiskWarning(false); // 用户取消
             setResult(RESULT_CANCELED); // 设置结果为CANCELED
             finish(); // 关闭当前Activity
         });
@@ -72,4 +73,16 @@ public class RiskWarningActivity extends AppCompatActivity {
         // 如果需要允许返回键退出，可以移除此方法或调用 super.onBackPressed();
         // super.onBackPressed(); // uncomment this line to allow back button
     }
+
+    public static boolean hasAgreedToRiskWarning() {
+        SharedPreferences prefs = sContext.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        return prefs.getBoolean(KEY_AGREE_RISK, false);
+    }
+
+    public static void setAgreedToRiskWarning(boolean agreed) {
+        SharedPreferences prefs = sContext.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(KEY_AGREE_RISK, agreed);
+        editor.apply();
+    
 }
