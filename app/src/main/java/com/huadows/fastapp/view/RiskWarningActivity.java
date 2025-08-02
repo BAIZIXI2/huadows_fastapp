@@ -1,6 +1,7 @@
 package com.huadows.fastapp.view;
 
 import android.annotation.SuppressLint;
+import android.content.Context
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MotionEvent;
