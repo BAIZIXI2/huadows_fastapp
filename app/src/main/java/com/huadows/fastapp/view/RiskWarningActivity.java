@@ -15,11 +15,11 @@ import com.huadows.fastapp.App; // 导入App类来设置SharedPreferences
 import com.huadows.fastapp.R;
 
 public class RiskWarningActivity extends AppCompatActivity {
-    protected Context ctx;
+    public static Context ctx;
     private Button buttonConfirm;
     private Button buttonCancel;
-    public String PREFS_NAME = "FastAppPrefs";
-    public String KEY_AGREE_RISK = "agree_risk_warning";
+    public static final String PREFS_NAME = "FastAppPrefs";
+    public static final String KEY_AGREE_RISK = "agree_risk_warning";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,12 +77,12 @@ public class RiskWarningActivity extends AppCompatActivity {
         // super.onBackPressed(); // uncomment this line to allow back button
     }
 
-    public boolean hasAgreedToRiskWarning() {
+    public static boolean hasAgreedToRiskWarning() {
         SharedPreferences prefs = ctx.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return prefs.getBoolean(KEY_AGREE_RISK, false);
     }
 
-    public void setAgreedToRiskWarning(boolean agreed) {
+    public static void setAgreedToRiskWarning(boolean agreed) {
         SharedPreferences prefs = ctx.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(KEY_AGREE_RISK, agreed);
