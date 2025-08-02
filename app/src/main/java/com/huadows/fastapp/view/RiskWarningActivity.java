@@ -1,7 +1,7 @@
 package com.huadows.fastapp.view;
 
 import android.annotation.SuppressLint;
-import android.content.Context
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -15,10 +15,11 @@ import com.huadows.fastapp.App; // 导入App类来设置SharedPreferences
 import com.huadows.fastapp.R;
 
 public class RiskWarningActivity extends AppCompatActivity {
-    protected Context ctx;
+    public static Context ctx;
     private Button buttonConfirm;
     private Button buttonCancel;
-
+    public static final String PREFS_NAME = "FastAppPrefs";
+    public static final String KEY_AGREE_RISK = "agree_risk_warning";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,5 +87,5 @@ public class RiskWarningActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(KEY_AGREE_RISK, agreed);
         editor.apply();
-    
+    }
 }
