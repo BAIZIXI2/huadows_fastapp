@@ -18,7 +18,8 @@ public class RiskWarningActivity extends AppCompatActivity {
     protected Context ctx;
     private Button buttonConfirm;
     private Button buttonCancel;
-
+    public String PREFS_NAME = "FastAppPrefs";
+    public String KEY_AGREE_RISK = "agree_risk_warning";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,12 +77,12 @@ public class RiskWarningActivity extends AppCompatActivity {
         // super.onBackPressed(); // uncomment this line to allow back button
     }
 
-    public static boolean hasAgreedToRiskWarning() {
+    public boolean hasAgreedToRiskWarning() {
         SharedPreferences prefs = ctx.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return prefs.getBoolean(KEY_AGREE_RISK, false);
     }
 
-    public static void setAgreedToRiskWarning(boolean agreed) {
+    public void setAgreedToRiskWarning(boolean agreed) {
         SharedPreferences prefs = ctx.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(KEY_AGREE_RISK, agreed);
